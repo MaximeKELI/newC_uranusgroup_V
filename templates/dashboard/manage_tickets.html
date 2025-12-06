@@ -1,0 +1,100 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Tickets Support</h1>
+            <p class="text-gray-600">Gérez tous les tickets de support</p>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="admin-card p-6 mb-6" data-aos="fade-up">
+    <form method="get" class="flex flex-wrap gap-4">
+        <select name="status" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            <option value="">Tous les statuts</option>
+            <option value="open" {% if status_filter == 'open' %}selected{% endif %}>Ouvert</option>
+            <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>En cours</option>
+            <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Résolu</option>
+            <option value="closed" {% if status_filter == 'closed' %}selected{% endif %}>Fermé</option>
+        </select>
+        <button type="submit" class="btn-admin-primary px-6 py-2 rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Filtrer
+        </button>
+        <a href="{% url 'dashboard:manage_tickets' %}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            Réinitialiser
+        </a>
+    </form>
+</div>
+
+<!-- Liste des tickets -->
+<div class="admin-card overflow-hidden" data-aos="fade-up">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Sujet</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Utilisateur</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Statut</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Priorité</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Assigné à</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for ticket in tickets %}
+                <tr class="table-row">
+                    <td class="px-6 py-4 font-semibold text-gray-900">{{ ticket.subject }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ ticket.user.username }}</td>
+                    <td class="px-6 py-4">
+                        <span class="badge {% if ticket.status == 'resolved' %}badge-success{% elif ticket.status == 'in_progress' %}badge-info{% elif ticket.status == 'open' %}badge-warning{% else %}badge-danger{% endif %}">
+                            {{ ticket.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="badge {% if ticket.priority == 'urgent' %}badge-danger{% elif ticket.priority == 'high' %}badge-warning{% else %}badge-info{% endif %}">
+                            {{ ticket.get_priority_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700">
+                        {% if ticket.assigned_to %}{{ ticket.assigned_to.username }}{% else %}-{% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">{{ ticket.created_at|date:"d/m/Y" }}</td>
+                    <td class="px-6 py-4">
+                        <a href="{% url 'dashboard:ticket_detail' ticket.id %}" class="text-primary-cyan hover:text-primary-dark transition" title="Voir">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        <i class="fas fa-ticket-alt text-4xl mb-4"></i>
+                        <p>Aucun ticket trouvé.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if tickets.has_other_pages %}
+    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+        <div class="text-sm text-gray-700">Page {{ tickets.number }} sur {{ tickets.paginator.num_pages }}</div>
+        <div class="flex space-x-2">
+            {% if tickets.has_previous %}
+            <a href="?page={{ tickets.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Précédent</a>
+            {% endif %}
+            {% if tickets.has_next %}
+            <a href="?page={{ tickets.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Suivant</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

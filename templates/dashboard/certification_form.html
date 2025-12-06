@@ -1,0 +1,65 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">
+                {% if action == 'create' %}Créer une certification{% else %}Modifier la certification{% endif %}
+            </h1>
+        </div>
+        <a href="{% url 'dashboard:manage_certifications' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            <i class="fas fa-arrow-left mr-2"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="admin-card p-8" data-aos="fade-up">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom *</label>
+                <input type="text" name="name" value="{% if certification %}{{ certification.name }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Code *</label>
+                <input type="text" name="code" value="{% if certification %}{{ certification.code }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie *</label>
+                <select name="category" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <option value="">Sélectionner une catégorie</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if certification and certification.category.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Ordre</label>
+                <input type="number" name="order" value="{% if certification %}{{ certification.order }}{% else %}0{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+            <textarea name="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if certification %}{{ certification.description }}{% endif %}</textarea>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Image</label>
+            {% if certification and certification.image %}
+            <div class="mb-2">
+                <img src="{{ certification.image.url }}" alt="{{ certification.name }}" class="w-32 h-32 object-contain">
+            </div>
+            {% endif %}
+            <input type="file" name="image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        </div>
+        <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <a href="{% url 'dashboard:manage_certifications' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">Annuler</a>
+            <button type="submit" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-save mr-2"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

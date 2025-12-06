@@ -1,0 +1,49 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Certifications</h1>
+            <p class="text-gray-600">Gérez les certifications ISO</p>
+        </div>
+        <a href="{% url 'dashboard:certification_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+            <i class="fas fa-plus mr-2"></i> Nouvelle certification
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for cert in certifications %}
+    <div class="admin-card p-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-xl font-bold text-primary-dark">{{ cert.name }}</h3>
+                <p class="text-sm text-gray-500">{{ cert.code }}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+                <a href="{% url 'dashboard:certification_edit' cert.id %}" class="text-primary-cyan hover:text-primary-dark transition">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form method="post" action="{% url 'dashboard:certification_delete' cert.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500 hover:text-red-700 transition" onclick="return confirm('Êtes-vous sûr ?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% if cert.image %}
+        <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="w-full h-32 object-contain mb-4">
+        {% endif %}
+        <p class="text-gray-600 text-sm">{{ cert.description|truncatewords:20 }}</p>
+    </div>
+    {% empty %}
+    <div class="col-span-full admin-card p-12 text-center">
+        <i class="fas fa-certificate text-6xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600">Aucune certification.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

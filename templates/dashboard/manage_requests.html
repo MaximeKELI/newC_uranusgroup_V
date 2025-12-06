@@ -1,0 +1,110 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Demandes</h1>
+            <p class="text-gray-600">Gérez toutes les demandes de service</p>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="admin-card p-6 mb-6" data-aos="fade-up">
+    <form method="get" class="flex flex-wrap gap-4">
+        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        <select name="status" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            <option value="">Tous les statuts</option>
+            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>En attente</option>
+            <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>En cours</option>
+            <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Terminé</option>
+            <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Annulé</option>
+        </select>
+        <button type="submit" class="btn-admin-primary px-6 py-2 rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Filtrer
+        </button>
+        <a href="{% url 'dashboard:manage_requests' %}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            Réinitialiser
+        </a>
+    </form>
+</div>
+
+<!-- Liste des demandes -->
+<div class="admin-card overflow-hidden" data-aos="fade-up">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Titre</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Client</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Service</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Statut</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Priorité</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for req in requests %}
+                <tr class="table-row">
+                    <td class="px-6 py-4 font-semibold text-gray-900">{{ req.title }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ req.client.username }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ req.service.name }}</td>
+                    <td class="px-6 py-4">
+                        <span class="badge {% if req.status == 'completed' %}badge-success{% elif req.status == 'in_progress' %}badge-info{% elif req.status == 'pending' %}badge-warning{% else %}badge-danger{% endif %}">
+                            {{ req.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="badge {% if req.priority == 'urgent' %}badge-danger{% elif req.priority == 'high' %}badge-warning{% else %}badge-info{% endif %}">
+                            {{ req.get_priority_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">{{ req.created_at|date:"d/m/Y" }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-2">
+                            <a href="{% url 'dashboard:request_edit' req.id %}" class="text-primary-cyan hover:text-primary-dark transition" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'dashboard:request_export_pdf' req.id %}" class="text-blue-500 hover:text-blue-700 transition" title="Exporter PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                            <form method="post" action="{% url 'dashboard:request_delete' req.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Supprimer" onclick="return confirm('Êtes-vous sûr ?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        <i class="fas fa-file-alt text-4xl mb-4"></i>
+                        <p>Aucune demande trouvée.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if requests.has_other_pages %}
+    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+        <div class="text-sm text-gray-700">Page {{ requests.number }} sur {{ requests.paginator.num_pages }}</div>
+        <div class="flex space-x-2">
+            {% if requests.has_previous %}
+            <a href="?page={{ requests.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Précédent</a>
+            {% endif %}
+            {% if requests.has_next %}
+            <a href="?page={{ requests.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Suivant</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

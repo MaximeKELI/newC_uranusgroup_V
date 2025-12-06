@@ -1,0 +1,111 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">
+                {% if action == 'create' %}Créer un service{% else %}Modifier le service{% endif %}
+            </h1>
+            <p class="text-gray-600">Remplissez le formulaire ci-dessous</p>
+        </div>
+        <a href="{% url 'dashboard:manage_services' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            <i class="fas fa-arrow-left mr-2"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="admin-card p-8" data-aos="fade-up">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom *</label>
+                <input type="text" name="name" value="{% if service %}{{ service.name }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Slug *</label>
+                <input type="text" name="slug" value="{% if service %}{{ service.slug }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                <p class="text-xs text-gray-500 mt-1">Ex: certification-iso-9001</p>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie *</label>
+                <select name="category" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <option value="">Sélectionner une catégorie</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if service and service.category.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Icône Font Awesome</label>
+                <input type="text" name="icon" value="{% if service %}{{ service.icon }}{% endif %}" placeholder="fas fa-certificate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Prix à partir de (€)</label>
+                <input type="number" step="0.01" name="price_starting_from" value="{% if service %}{{ service.price_starting_from }}{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Durée</label>
+                <input type="text" name="duration" value="{% if service %}{{ service.duration }}{% endif %}" placeholder="6-12 mois" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
+                <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <option value="active" {% if service and service.status == 'active' %}selected{% endif %}>Actif</option>
+                    <option value="inactive" {% if service and service.status == 'inactive' %}selected{% endif %}>Inactif</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Ordre d'affichage</label>
+                <input type="number" name="order" value="{% if service %}{{ service.order }}{% else %}0{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description courte *</label>
+            <textarea name="short_description" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if service %}{{ service.short_description }}{% endif %}</textarea>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Description complète *</label>
+            <textarea name="full_description" rows="8" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if service %}{{ service.full_description }}{% endif %}</textarea>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Image</label>
+            {% if service and service.image %}
+            <div class="mb-2">
+                <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-32 h-32 object-cover rounded-lg">
+            </div>
+            {% endif %}
+            <input type="file" name="image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        </div>
+        
+        <div class="flex items-center">
+            <label class="flex items-center">
+                <input type="checkbox" name="featured" {% if service and service.featured or action == 'create' %}checked{% endif %} class="w-4 h-4 text-primary-cyan border-gray-300 rounded focus:ring-primary-cyan">
+                <span class="ml-2 text-sm text-gray-700">Mettre en avant</span>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <a href="{% url 'dashboard:manage_services' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+                Annuler
+            </a>
+            <button type="submit" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-save mr-2"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

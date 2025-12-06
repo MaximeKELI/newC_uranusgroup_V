@@ -1,0 +1,123 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Modifier la demande</h1>
+            <p class="text-gray-600">{{ service_request.title }}</p>
+        </div>
+        <a href="{% url 'dashboard:manage_requests' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            <i class="fas fa-arrow-left mr-2"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+        <div class="admin-card p-8" data-aos="fade-up">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Titre *</label>
+                    <input type="text" name="title" value="{{ service_request.title }}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Description *</label>
+                    <textarea name="description" rows="8" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{{ service_request.description }}</textarea>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
+                        <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                            <option value="pending" {% if service_request.status == 'pending' %}selected{% endif %}>En attente</option>
+                            <option value="in_progress" {% if service_request.status == 'in_progress' %}selected{% endif %}>En cours</option>
+                            <option value="completed" {% if service_request.status == 'completed' %}selected{% endif %}>Terminé</option>
+                            <option value="cancelled" {% if service_request.status == 'cancelled' %}selected{% endif %}>Annulé</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Priorité</label>
+                        <select name="priority" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                            <option value="low" {% if service_request.priority == 'low' %}selected{% endif %}>Basse</option>
+                            <option value="medium" {% if service_request.priority == 'medium' %}selected{% endif %}>Moyenne</option>
+                            <option value="high" {% if service_request.priority == 'high' %}selected{% endif %}>Haute</option>
+                            <option value="urgent" {% if service_request.priority == 'urgent' %}selected{% endif %}>Urgente</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Assigné à</label>
+                        <select name="assigned_to" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                            <option value="">Non assigné</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}" {% if service_request.assigned_to and service_request.assigned_to.id == user.id %}selected{% endif %}>{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Date limite</label>
+                        <input type="datetime-local" name="deadline" value="{% if service_request.deadline %}{{ service_request.deadline|date:'Y-m-d\TH:i' }}{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <a href="{% url 'dashboard:manage_requests' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Annuler
+                    </a>
+                    <button type="submit" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                        <i class="fas fa-save mr-2"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div>
+        <div class="admin-card p-6 mb-6" data-aos="fade-up">
+            <h3 class="font-bold text-primary-dark mb-4">Informations</h3>
+            <div class="space-y-3 text-sm">
+                <div>
+                    <p class="text-gray-600">Service</p>
+                    <p class="font-semibold">{{ service_request.service.name }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Client</p>
+                    <p class="font-semibold">{{ service_request.client.username }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Créée le</p>
+                    <p class="font-semibold">{{ service_request.created_at|date:"d/m/Y à H:i" }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-card p-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="font-bold text-primary-dark mb-4">Livrables</h3>
+            {% if deliverables %}
+            <div class="space-y-3">
+                {% for deliverable in deliverables %}
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold text-sm">{{ deliverable.name }}</p>
+                        <p class="text-xs text-gray-500">{{ deliverable.uploaded_at|date:"d/m/Y" }}</p>
+                    </div>
+                    <a href="{{ deliverable.file.url }}" download class="text-primary-cyan hover:text-primary-dark">
+                        <i class="fas fa-download"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-gray-500">Aucun livrable</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

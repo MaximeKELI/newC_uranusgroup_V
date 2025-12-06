@@ -1,0 +1,92 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">
+                {% if action == 'create' %}Créer un article{% else %}Modifier l'article{% endif %}
+            </h1>
+            <p class="text-gray-600">Remplissez le formulaire ci-dessous</p>
+        </div>
+        <a href="{% url 'dashboard:manage_articles' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            <i class="fas fa-arrow-left mr-2"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="admin-card p-8" data-aos="fade-up">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Titre *</label>
+                <input type="text" name="title" value="{% if article %}{{ article.title }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Slug *</label>
+                <input type="text" name="slug" value="{% if article %}{{ article.slug }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
+                <select name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <option value="">Aucune catégorie</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if article and article.category and article.category.id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Statut</label>
+                <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <option value="draft" {% if article and article.status == 'draft' %}selected{% endif %}>Brouillon</option>
+                    <option value="published" {% if article and article.status == 'published' %}selected{% endif %}>Publié</option>
+                    <option value="archived" {% if article and article.status == 'archived' %}selected{% endif %}>Archivé</option>
+                </select>
+            </div>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Extrait *</label>
+            <textarea name="excerpt" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if article %}{{ article.excerpt }}{% endif %}</textarea>
+            <p class="text-xs text-gray-500 mt-1">Maximum 500 caractères</p>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Contenu *</label>
+            <textarea name="content" rows="15" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if article %}{{ article.content }}{% endif %}</textarea>
+        </div>
+        
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Image mise en avant</label>
+            {% if article and article.featured_image %}
+            <div class="mb-2">
+                <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-32 h-32 object-cover rounded-lg">
+            </div>
+            {% endif %}
+            <input type="file" name="featured_image" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        </div>
+        
+        <div class="flex items-center">
+            <label class="flex items-center">
+                <input type="checkbox" name="featured" {% if article and article.featured or action == 'create' %}checked{% endif %} class="w-4 h-4 text-primary-cyan border-gray-300 rounded focus:ring-primary-cyan">
+                <span class="ml-2 text-sm text-gray-700">Mettre en avant</span>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <a href="{% url 'dashboard:manage_articles' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+                Annuler
+            </a>
+            <button type="submit" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-save mr-2"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

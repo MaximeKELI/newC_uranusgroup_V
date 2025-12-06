@@ -1,0 +1,106 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Articles</h1>
+            <p class="text-gray-600">Gérez tous les articles du blog</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="{% url 'dashboard:manage_blog_categories' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+                <i class="fas fa-tags mr-2"></i> Catégories
+            </a>
+            <a href="{% url 'dashboard:article_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-plus mr-2"></i> Nouvel article
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="admin-card p-6 mb-6" data-aos="fade-up">
+    <form method="get" class="flex flex-wrap gap-4">
+        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        <select name="status" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            <option value="">Tous les statuts</option>
+            <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Brouillon</option>
+            <option value="published" {% if status_filter == 'published' %}selected{% endif %}>Publié</option>
+            <option value="archived" {% if status_filter == 'archived' %}selected{% endif %}>Archivé</option>
+        </select>
+        <button type="submit" class="btn-admin-primary px-6 py-2 rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Filtrer
+        </button>
+        <a href="{% url 'dashboard:manage_articles' %}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            Réinitialiser
+        </a>
+    </form>
+</div>
+
+<!-- Liste des articles -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for article in articles %}
+    <div class="admin-card overflow-hidden" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+        {% if article.featured_image %}
+        <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-48 object-cover">
+        {% endif %}
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+                {% if article.category %}
+                <span class="badge badge-info">{{ article.category.name }}</span>
+                {% endif %}
+                <span class="badge {% if article.status == 'published' %}badge-success{% elif article.status == 'draft' %}badge-warning{% else %}badge-danger{% endif %}">
+                    {{ article.get_status_display }}
+                </span>
+            </div>
+            <h3 class="text-xl font-bold text-primary-dark mb-2">{{ article.title }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ article.excerpt }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
+                <span><i class="fas fa-user mr-1"></i> {{ article.author.username }}</span>
+                <span><i class="fas fa-eye mr-1"></i> {{ article.views_count }} vues</span>
+            </div>
+            <div class="flex items-center justify-between">
+                {% if article.featured %}
+                <span class="badge badge-success">Mis en avant</span>
+                {% else %}
+                <span></span>
+                {% endif %}
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'dashboard:article_edit' article.id %}" class="text-primary-cyan hover:text-primary-dark transition" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="post" action="{% url 'dashboard:article_delete' article.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Supprimer" onclick="return confirm('Êtes-vous sûr ?')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full admin-card p-12 text-center" data-aos="fade-up">
+        <i class="fas fa-newspaper text-6xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600">Aucun article trouvé.</p>
+        <a href="{% url 'dashboard:article_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold inline-block mt-4">
+            Créer le premier article
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if articles.has_other_pages %}
+<div class="mt-6 flex items-center justify-center space-x-2">
+    {% if articles.has_previous %}
+    <a href="?page={{ articles.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Précédent</a>
+    {% endif %}
+    <span class="px-4 py-2 text-gray-700">Page {{ articles.number }} sur {{ articles.paginator.num_pages }}</span>
+    {% if articles.has_next %}
+    <a href="?page={{ articles.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Suivant</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+

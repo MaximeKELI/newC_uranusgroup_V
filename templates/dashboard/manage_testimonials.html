@@ -1,0 +1,66 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Témoignages</h1>
+            <p class="text-gray-600">Gérez les témoignages clients</p>
+        </div>
+        <a href="{% url 'dashboard:testimonial_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+            <i class="fas fa-plus mr-2"></i> Nouveau témoignage
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for testimonial in testimonials %}
+    <div class="admin-card p-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center">
+                {% if testimonial.client_avatar %}
+                <img src="{{ testimonial.client_avatar.url }}" alt="{{ testimonial.client_name }}" class="w-16 h-16 rounded-full mr-4 object-cover">
+                {% else %}
+                <div class="w-16 h-16 rounded-full bg-primary-cyan flex items-center justify-center text-white text-2xl font-bold mr-4">
+                    {{ testimonial.client_name|first }}
+                </div>
+                {% endif %}
+                <div>
+                    <h3 class="text-lg font-bold text-primary-dark">{{ testimonial.client_name }}</h3>
+                    <p class="text-sm text-gray-500">{{ testimonial.client_position }}</p>
+                    {% if testimonial.client_company %}
+                    <p class="text-sm text-gray-400">{{ testimonial.client_company }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <a href="{% url 'dashboard:testimonial_edit' testimonial.id %}" class="text-primary-cyan hover:text-primary-dark transition">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form method="post" action="{% url 'dashboard:testimonial_delete' testimonial.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500 hover:text-red-700 transition" onclick="return confirm('Êtes-vous sûr ?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="flex mb-3">
+            {% for i in "12345"|make_list %}
+            <i class="fas fa-star {% if forloop.counter <= testimonial.rating %}text-yellow-400{% else %}text-gray-300{% endif %}"></i>
+            {% endfor %}
+        </div>
+        <p class="text-gray-700 italic mb-3">"{{ testimonial.content|truncatewords:30 }}"</p>
+        {% if testimonial.featured %}
+        <span class="badge badge-success">Mis en avant</span>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="col-span-full admin-card p-12 text-center">
+        <i class="fas fa-quote-left text-6xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600">Aucun témoignage.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

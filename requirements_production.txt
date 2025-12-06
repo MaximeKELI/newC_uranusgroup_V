@@ -1,0 +1,36 @@
+# Requirements pour la production
+Django==5.0.1
+djangorestframework==3.16.1
+reportlab==4.4.5
+Pillow==12.0.0
+django-cors-headers==4.9.0
+
+# Base de données PostgreSQL
+psycopg2-binary==2.9.9
+
+# Cache Redis
+django-redis==5.4.0
+redis==5.0.1
+
+# Serveur WSGI
+gunicorn==21.2.0
+
+# Variables d'environnement
+python-decouple==3.8
+python-dotenv==1.0.0
+
+# Compression
+django-compressor==4.4
+
+# Sécurité
+django-ratelimit==4.1.0
+
+# Monitoring (optionnel)
+# sentry-sdk==1.38.0
+
+# Health check
+django-health-check==3.17.0
+
+# WhiteNoise pour servir les fichiers statiques
+whitenoise==6.6.0
+

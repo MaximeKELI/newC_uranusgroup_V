@@ -3,7 +3,6 @@ Models pour la gestion des services QHSE et Informatique
 """
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 User = get_user_model()
 

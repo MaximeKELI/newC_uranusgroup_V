@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service_request.title }} - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-8" data-aos="fade-up">
+                <a href="{% url 'services:my_requests' %}" class="text-primary-cyan hover:underline mb-4 inline-block">
+                    <i class="fas fa-arrow-left mr-2"></i> Retour à mes demandes
+                </a>
+                
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h1 class="text-3xl font-bold text-primary-dark">{{ service_request.title }}</h1>
+                        <span class="px-4 py-2 rounded-full text-sm font-semibold 
+                            {% if service_request.status == 'completed' %}bg-green-100 text-green-800
+                            {% elif service_request.status == 'in_progress' %}bg-blue-100 text-blue-800
+                            {% elif service_request.status == 'pending' %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ service_request.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
+                        <div>
+                            <p class="text-gray-600 mb-1">Service</p>
+                            <p class="font-semibold text-primary-dark">{{ service_request.service.name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Priorité</p>
+                            <p class="font-semibold text-primary-dark">{{ service_request.get_priority_display }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 mb-1">Date de création</p>
+                            <p class="font-semibold text-primary-dark">{{ service_request.created_at|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        {% if service_request.deadline %}
+                        <div>
+                            <p class="text-gray-600 mb-1">Date limite</p>
+                            <p class="font-semibold text-primary-dark">{{ service_request.deadline|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        {% endif %}
+                        {% if service_request.assigned_to %}
+                        <div>
+                            <p class="text-gray-600 mb-1">Assigné à</p>
+                            <p class="font-semibold text-primary-dark">{{ service_request.assigned_to.username }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-primary-dark mb-3">Description</h2>
+                        <p class="text-gray-700 whitespace-pre-line">{{ service_request.description }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Livrables -->
+            {% if deliverables %}
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8" data-aos="fade-up">
+                <h2 class="text-2xl font-bold text-primary-dark mb-6">Livrables</h2>
+                <div class="space-y-4">
+                    {% for deliverable in deliverables %}
+                    <div class="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-semibold text-primary-dark mb-1">{{ deliverable.name }}</h3>
+                            {% if deliverable.description %}
+                            <p class="text-sm text-gray-600">{{ deliverable.description }}</p>
+                            {% endif %}
+                            <p class="text-xs text-gray-500 mt-2">Uploadé le {{ deliverable.uploaded_at|date:"d/m/Y à H:i" }} par {{ deliverable.uploaded_by.username }}</p>
+                        </div>
+                        <a href="{{ deliverable.file.url }}" download class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
+                            <i class="fas fa-download mr-2"></i> Télécharger
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8 text-center" data-aos="fade-up">
+                <i class="fas fa-file-alt text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600">Aucun livrable disponible pour le moment.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

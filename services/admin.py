@@ -4,7 +4,7 @@ from .models import ServiceCategory, Service, ServiceRequest, Deliverable, Certi
 
 @admin.register(ServiceCategory)
 class ServiceCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'order', 'created_at']
+    list_display = ['name', 'slug', 'order']
     prepopulated_fields = {'slug': ('name',)}
 
 

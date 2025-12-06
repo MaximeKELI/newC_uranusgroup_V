@@ -155,7 +155,7 @@
     // Chart des demandes par statut
     const requestsCtx = document.getElementById('requestsChart');
     if (requestsCtx) {
-        const requestsData = {{ requests_by_status|safe }};
+        const requestsData = JSON.parse('{{ requests_by_status|escapejs }}');
         const labels = requestsData.map(item => {
             const statusMap = {
                 'pending': 'En attente',
@@ -191,7 +191,7 @@
     // Chart des utilisateurs par rôle
     const usersCtx = document.getElementById('usersChart');
     if (usersCtx) {
-        const usersData = {{ users_by_role|safe }};
+        const usersData = JSON.parse('{{ users_by_role|escapejs }}');
         const labels = usersData.map(item => {
             const roleMap = {
                 'admin': 'Administrateur',

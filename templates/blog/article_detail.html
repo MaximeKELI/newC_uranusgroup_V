@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-8" data-aos="fade-up">
+                <a href="{% url 'blog:article_list' %}" class="text-primary-cyan hover:underline mb-4 inline-block">
+                    <i class="fas fa-arrow-left mr-2"></i> Retour au blog
+                </a>
+                
+                {% if article.featured_image %}
+                <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-96 object-cover rounded-lg mb-8">
+                {% endif %}
+                
+                <div class="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                    {% if article.category %}
+                    <span class="px-3 py-1 bg-primary-cyan bg-opacity-10 text-primary-cyan rounded-full font-semibold">{{ article.category.name }}</span>
+                    {% endif %}
+                    <span><i class="fas fa-user mr-1"></i> {{ article.author.username }}</span>
+                    <span><i class="fas fa-calendar mr-1"></i> {{ article.published_at|date:"d/m/Y" }}</span>
+                    <span><i class="fas fa-eye mr-1"></i> {{ article.views_count }} vues</span>
+                </div>
+                
+                <h1 class="text-4xl md:text-5xl font-bold text-primary-dark mb-4">{{ article.title }}</h1>
+                <p class="text-xl text-gray-600 mb-8">{{ article.excerpt }}</p>
+            </div>
+            
+            <div class="prose max-w-none mb-12" data-aos="fade-up">
+                <div class="text-gray-700 whitespace-pre-line">{{ article.content|linebreaks }}</div>
+            </div>
+            
+            {% if related_articles %}
+            <div class="mt-16 border-t border-gray-200 pt-8" data-aos="fade-up">
+                <h2 class="text-2xl font-bold text-primary-dark mb-6">Articles similaires</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {% for related in related_articles %}
+                    <div class="bg-white rounded-lg shadow-lg p-6 card-hover">
+                        {% if related.featured_image %}
+                        <img src="{{ related.featured_image.url }}" alt="{{ related.title }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                        {% endif %}
+                        <h3 class="text-lg font-bold text-primary-dark mb-2">{{ related.title }}</h3>
+                        <p class="text-gray-600 text-sm mb-4">{{ related.excerpt|truncatewords:15 }}</p>
+                        <a href="{% url 'blog:article_detail' related.slug %}" class="text-primary-cyan font-semibold text-sm hover:underline">
+                            Lire <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

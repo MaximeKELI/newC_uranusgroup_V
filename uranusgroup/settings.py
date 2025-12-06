@@ -12,7 +12,22 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config, Csv
+
+# Essayer d'importer decouple, sinon utiliser os.environ
+try:
+    from decouple import config, Csv
+    USE_DECOUPLE = True
+except ImportError:
+    USE_DECOUPLE = False
+    def config(key, default=None, cast=None):
+        value = os.environ.get(key, default)
+        if cast and value:
+            return cast(value)
+        return value
+    def Csv(value):
+        if isinstance(value, str):
+            return [v.strip() for v in value.split(',') if v.strip()]
+        return value
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -187,7 +202,11 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', cast=Csv())
+if USE_DECOUPLE:
+    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', cast=Csv())
+else:
+    cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000')
+    CORS_ALLOWED_ORIGINS = [v.strip() for v in cors_origins.split(',') if v.strip()] if cors_origins else ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True
 
 # Login/Logout URLs

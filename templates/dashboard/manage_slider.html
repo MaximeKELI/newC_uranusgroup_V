@@ -15,7 +15,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {% for item in items %}
-    <div class="admin-card overflow-hidden" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+    <div class="admin-card overflow-hidden" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 50 %}">
         {% if item.image %}
         <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-48 object-cover">
         {% endif %}

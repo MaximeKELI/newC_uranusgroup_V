@@ -114,7 +114,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service in qhse_services %}
-            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1'|mul:100 }}">
+            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 100 %}">
                 {% if service.icon %}
                 <div class="text-4xl text-primary-cyan mb-4">
                     <i class="{{ service.icon }}"></i>
@@ -151,7 +151,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service in info_services %}
-            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1'|mul:100 }}">
+            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 100 %}">
                 {% if service.icon %}
                 <div class="text-4xl text-primary-cyan mb-4">
                     <i class="{{ service.icon }}"></i>

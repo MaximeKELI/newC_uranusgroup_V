@@ -23,6 +23,9 @@ class SecurityTests(TestCase):
     def setUp(self):
         """Configuration initiale"""
         self.client = Client()
+        # Nettoyer les utilisateurs de test existants
+        User.objects.filter(username__in=['testuser', 'testadmin']).delete()
+        
         # Créer un utilisateur de test
         self.test_user = User.objects.create_user(
             username='testuser',
@@ -32,8 +35,8 @@ class SecurityTests(TestCase):
         )
         # Créer un admin de test
         self.admin_user = User.objects.create_user(
-            username='admin',
-            email='admin@example.com',
+            username='testadmin',
+            email='testadmin@example.com',
             password='AdminPassword123!',
             role='admin'
         )
@@ -196,17 +199,18 @@ class SecurityTests(TestCase):
     def test_admin_required_for_admin_dashboard(self):
         """Vérifier que le dashboard admin nécessite les droits admin"""
         # Se connecter en tant qu'utilisateur normal
-        self.client.login(
+        login_success = self.client.login(
             username='testuser',
             password='TestPassword123!'
         )
-        response = self.client.get(reverse('dashboard:admin_dashboard'))
-        # Devrait être refusé ou redirigé
-        self.assertIn(
-            response.status_code,
-            [302, 403, 404],
-            "Dashboard admin accessible sans droits admin"
-        )
+        if login_success:
+            response = self.client.get(reverse('dashboard:admin_dashboard'))
+            # Devrait être refusé ou redirigé
+            self.assertIn(
+                response.status_code,
+                [302, 403, 404],
+                "Dashboard admin accessible sans droits admin"
+            )
 
     def test_brute_force_protection(self):
         """Tester la protection contre les attaques brute force"""

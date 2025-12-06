@@ -15,7 +15,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for cert in certifications %}
-    <div class="admin-card p-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+    <div class="admin-card p-6" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 50 %}">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h3 class="text-xl font-bold text-primary-dark">{{ cert.name }}</h3>

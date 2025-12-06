@@ -15,7 +15,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for member in members %}
-    <div class="admin-card p-6 text-center" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+    <div class="admin-card p-6 text-center" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 50 %}">
         {% if member.photo %}
         <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
         {% else %}

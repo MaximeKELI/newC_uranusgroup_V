@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Erreur serveur - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white min-h-screen flex items-center">
+    <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-9xl font-bold text-red-500 mb-4" data-aos="zoom-in">500</div>
+            <h1 class="text-4xl md:text-5xl font-bold text-primary-dark mb-4" data-aos="fade-up" data-aos-delay="200">
+                Erreur serveur
+            </h1>
+            <p class="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="300">
+                Une erreur s'est produite sur le serveur. Notre équipe a été notifiée et travaille à résoudre le problème.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="400">
+                <a href="{% url 'core:home' %}" class="btn-primary px-8 py-4 rounded-lg text-lg font-semibold inline-block">
+                    <i class="fas fa-home mr-2"></i> Retour à l'accueil
+                </a>
+                <a href="{% url 'core:contact' %}" class="px-8 py-4 bg-gray-200 text-gray-700 rounded-lg text-lg font-semibold hover:bg-gray-300 transition inline-block">
+                    <i class="fas fa-envelope mr-2"></i> Nous contacter
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

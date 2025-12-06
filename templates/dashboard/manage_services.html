@@ -1,0 +1,104 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Services</h1>
+            <p class="text-gray-600">Gérez tous les services de la plateforme</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="{% url 'dashboard:manage_service_categories' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+                <i class="fas fa-folder mr-2"></i> Catégories
+            </a>
+            <a href="{% url 'dashboard:service_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-plus mr-2"></i> Nouveau service
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="admin-card p-6 mb-6" data-aos="fade-up">
+    <form method="get" class="flex flex-wrap gap-4">
+        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            <option value="">Toutes les catégories</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if category_filter == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-admin-primary px-6 py-2 rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Filtrer
+        </button>
+        <a href="{% url 'dashboard:manage_services' %}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            Réinitialiser
+        </a>
+    </form>
+</div>
+
+<!-- Liste des services -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for service in services %}
+    <div class="admin-card overflow-hidden" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+        {% if service.image %}
+        <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-48 object-cover">
+        {% endif %}
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+                <span class="badge badge-info">{{ service.category.name }}</span>
+                {% if service.featured %}
+                <span class="badge badge-success">Mis en avant</span>
+                {% endif %}
+            </div>
+            <h3 class="text-xl font-bold text-primary-dark mb-2">{{ service.name }}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ service.short_description }}</p>
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-500">
+                    <span class="badge {% if service.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                        {{ service.get_status_display }}
+                    </span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <a href="{% url 'dashboard:service_edit' service.id %}" class="text-primary-cyan hover:text-primary-dark transition" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="post" action="{% url 'dashboard:service_delete' service.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Supprimer" onclick="return confirm('Êtes-vous sûr ?')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full admin-card p-12 text-center" data-aos="fade-up">
+        <i class="fas fa-briefcase text-6xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600">Aucun service trouvé.</p>
+        <a href="{% url 'dashboard:service_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold inline-block mt-4">
+            Créer le premier service
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if services.has_other_pages %}
+<div class="mt-6 flex items-center justify-center space-x-2">
+    {% if services.has_previous %}
+    <a href="?page={{ services.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+        Précédent
+    </a>
+    {% endif %}
+    <span class="px-4 py-2 text-gray-700">Page {{ services.number }} sur {{ services.paginator.num_pages }}</span>
+    {% if services.has_next %}
+    <a href="?page={{ services.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+        Suivant
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+

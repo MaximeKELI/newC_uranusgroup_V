@@ -188,7 +188,7 @@
         
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
             {% for cert in certifications %}
-            <div class="certification-logo text-center" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|mul:100 }}">
+            <div class="certification-logo text-center" data-aos="zoom-in" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 {% if cert.image %}
                 <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="w-full h-32 object-contain mx-auto mb-4">
                 {% endif %}
@@ -214,7 +214,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for testimonial in testimonials %}
-            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:100 }}">
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 <div class="flex items-center mb-4">
                     {% if testimonial.client_avatar %}
                     <img src="{{ testimonial.client_avatar.url }}" alt="{{ testimonial.client_name }}" class="w-16 h-16 rounded-full mr-4">

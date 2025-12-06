@@ -18,7 +18,7 @@
 
 <div class="space-y-4">
     {% for notification in notifications %}
-    <div class="admin-card p-6 {% if not notification.read %}border-l-4 border-primary-cyan{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+    <div class="admin-card p-6 {% if not notification.read %}border-l-4 border-primary-cyan{% endif %}" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 50 %}">
         <div class="flex items-start justify-between">
             <div class="flex-1">
                 <div class="flex items-center mb-2">

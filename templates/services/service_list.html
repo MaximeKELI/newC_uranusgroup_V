@@ -37,7 +37,7 @@
         <!-- Liste des services -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service in services %}
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:100 }}">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 {% if service.image %}
                 <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-48 object-cover">
                 {% endif %}

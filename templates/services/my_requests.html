@@ -13,7 +13,7 @@
         {% if requests %}
         <div class="space-y-4">
             {% for req in requests %}
-            <div class="bg-white rounded-lg shadow-lg p-6 card-hover" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+            <div class="bg-white rounded-lg shadow-lg p-6 card-hover" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 50 %}">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-primary-dark mb-2">{{ req.title }}</h3>

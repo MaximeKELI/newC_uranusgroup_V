@@ -1,0 +1,24 @@
+# Service systemd pour Gunicorn
+# Placez ce fichier dans /etc/systemd/system/gunicorn-uranusgroup.service
+# Puis activez-le avec: sudo systemctl enable gunicorn-uranusgroup
+# Démarrez-le avec: sudo systemctl start gunicorn-uranusgroup
+
+[Unit]
+Description=Gunicorn daemon for Uranus Group
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/path/to/your/project
+Environment="PATH=/path/to/your/project/venv/bin"
+ExecStart=/path/to/your/project/venv/bin/gunicorn \
+    --config /path/to/your/project/gunicorn_config.py \
+    uranusgroup.wsgi:application
+
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+

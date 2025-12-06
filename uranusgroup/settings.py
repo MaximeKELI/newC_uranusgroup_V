@@ -145,14 +145,30 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
-# Configuration email (à configurer selon votre serveur)
+# Configuration email
+# Pour utiliser l'envoi d'emails réels, configurez les paramètres ci-dessous
+# et changez EMAIL_BACKEND en 'django.core.mail.backends.smtp.EmailBackend'
+
+# Mode développement : emails affichés dans la console
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-DEFAULT_FROM_EMAIL = "noreply@uranusgroup.com"
+
+# Mode production : configuration SMTP (décommentez et configurez)
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.gmail.com"  # ou votre serveur SMTP
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "votre-email@gmail.com"
+# EMAIL_HOST_PASSWORD = "votre-mot-de-passe-app"  # Utilisez un mot de passe d'application pour Gmail
+# DEFAULT_FROM_EMAIL = "noreply@uranusgroup.com"
+
+# Alternative : Configuration pour SendGrid, Mailgun, etc.
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.sendgrid.net"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "apikey"
+# EMAIL_HOST_PASSWORD = "votre-api-key-sendgrid"
+# DEFAULT_FROM_EMAIL = "noreply@uranusgroup.com"
 
 # Configuration REST Framework
 REST_FRAMEWORK = {

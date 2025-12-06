@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "accounts",
     "dashboard",
     "blog",
+    "health_check",
 ]
 
 MIDDLEWARE = [

@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-r*^x8x@o$)aszc+pha7htuk7inlp)#o@ldz+n#wjr(li@__+v1"
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-r*^x8x@o$)aszc+pha7htuk7inlp)#o@ldz+n#wjr(li@__+v1")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 
 # Application definition
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Pour servir les fichiers statiques en production
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -82,12 +85,25 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Utiliser PostgreSQL en production, SQLite en développement
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config('DB_NAME', default='uranusgroup'),
+            "USER": config('DB_USER', default='postgres'),
+            "PASSWORD": config('DB_PASSWORD', default=''),
+            "HOST": config('DB_HOST', default='localhost'),
+            "PORT": config('DB_PORT', default='5432'),
+        }
+    }
 
 
 # Password validation
@@ -128,6 +144,9 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+# Configuration WhiteNoise pour servir les fichiers statiques
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # Media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -146,29 +165,13 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
 # Configuration email
-# Pour utiliser l'envoi d'emails réels, configurez les paramètres ci-dessous
-# et changez EMAIL_BACKEND en 'django.core.mail.backends.smtp.EmailBackend'
-
-# Mode développement : emails affichés dans la console
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-# Mode production : configuration SMTP (décommentez et configurez)
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.gmail.com"  # ou votre serveur SMTP
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = "votre-email@gmail.com"
-# EMAIL_HOST_PASSWORD = "votre-mot-de-passe-app"  # Utilisez un mot de passe d'application pour Gmail
-# DEFAULT_FROM_EMAIL = "noreply@uranusgroup.com"
-
-# Alternative : Configuration pour SendGrid, Mailgun, etc.
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.sendgrid.net"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = "apikey"
-# EMAIL_HOST_PASSWORD = "votre-api-key-sendgrid"
-# DEFAULT_FROM_EMAIL = "noreply@uranusgroup.com"
+EMAIL_BACKEND = config('EMAIL_BACKEND', default="django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = config('EMAIL_HOST', default="smtp.gmail.com")
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default="")
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default="")
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default="noreply@uranusgroup.com")
 
 # Configuration REST Framework
 REST_FRAMEWORK = {
@@ -183,12 +186,48 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', cast=Csv())
+CORS_ALLOW_CREDENTIALS = True
 
 # Login/Logout URLs
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Configuration du cache (Redis en production, local en développement)
+if not DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
+# Logging (basique en développement)
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': BASE_DIR / 'logs' / 'django.log',
+                'maxBytes': 1024 * 1024 * 15,  # 15MB
+                'backupCount': 10,
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+        },
+    }

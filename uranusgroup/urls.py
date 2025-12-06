@@ -28,6 +28,7 @@ urlpatterns = [
     path("dashboard/", include("dashboard.urls")),
     path("api/", include("services.api_urls")),
     path("api-auth/", include("rest_framework.urls")),
+    path("health/", include("health_check.urls")),
 ]
 
 # Servir les fichiers média en développement

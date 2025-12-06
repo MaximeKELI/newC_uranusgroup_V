@@ -1,0 +1,135 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion des Utilisateurs</h1>
+            <p class="text-gray-600">Gérez tous les utilisateurs de la plateforme</p>
+        </div>
+        <a href="{% url 'dashboard:user_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+            <i class="fas fa-plus mr-2"></i> Nouvel utilisateur
+        </a>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="admin-card p-6 mb-6" data-aos="fade-up">
+    <form method="get" class="flex flex-wrap gap-4">
+        <input type="text" name="search" value="{{ search }}" placeholder="Rechercher..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        <select name="role" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            <option value="">Tous les rôles</option>
+            <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Administrateur</option>
+            <option value="manager_qhse" {% if role_filter == 'manager_qhse' %}selected{% endif %}>Manager QHSE</option>
+            <option value="manager_info" {% if role_filter == 'manager_info' %}selected{% endif %}>Manager Info</option>
+            <option value="client" {% if role_filter == 'client' %}selected{% endif %}>Client</option>
+        </select>
+        <button type="submit" class="btn-admin-primary px-6 py-2 rounded-lg font-semibold">
+            <i class="fas fa-search mr-2"></i> Filtrer
+        </button>
+        <a href="{% url 'dashboard:manage_users' %}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            Réinitialiser
+        </a>
+    </form>
+</div>
+
+<!-- Liste des utilisateurs -->
+<div class="admin-card overflow-hidden" data-aos="fade-up">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Utilisateur</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Rôle</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Statut</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Date</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for user in users %}
+                <tr class="table-row">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="w-10 h-10 rounded-full mr-3">
+                            {% else %}
+                            <div class="w-10 h-10 rounded-full bg-primary-cyan flex items-center justify-center text-white font-bold mr-3">
+                                {{ user.username|first|upper }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ user.username }}</p>
+                                {% if user.first_name or user.last_name %}
+                                <p class="text-sm text-gray-500">{{ user.first_name }} {{ user.last_name }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ user.email }}</td>
+                    <td class="px-6 py-4">
+                        <span class="badge badge-info">{{ user.get_role_display }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if user.is_active %}
+                        <span class="badge badge-success">Actif</span>
+                        {% else %}
+                        <span class="badge badge-danger">Inactif</span>
+                        {% endif %}
+                        {% if user.is_verified %}
+                        <span class="badge badge-success ml-2">Vérifié</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">{{ user.created_at|date:"d/m/Y" }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-2">
+                            <a href="{% url 'dashboard:user_edit' user.id %}" class="text-primary-cyan hover:text-primary-dark transition" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {% if user != request.user %}
+                            <form method="post" action="{% url 'dashboard:user_delete' user.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Supprimer" onclick="return confirm('Êtes-vous sûr ?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        <i class="fas fa-users text-4xl mb-4"></i>
+                        <p>Aucun utilisateur trouvé.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if users.has_other_pages %}
+    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+        <div class="text-sm text-gray-700">
+            Page {{ users.number }} sur {{ users.paginator.num_pages }}
+        </div>
+        <div class="flex space-x-2">
+            {% if users.has_previous %}
+            <a href="?page={{ users.previous_page_number }}{% if role_filter %}&role={{ role_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                Précédent
+            </a>
+            {% endif %}
+            {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}{% if role_filter %}&role={{ role_filter }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                Suivant
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

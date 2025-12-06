@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Uranus Group{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-sidebar {
+        background: linear-gradient(180deg, #0A1A2F 0%, #1a2f4f 100%);
+        min-height: calc(100vh - 80px);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-menu-item {
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
+    
+    .admin-menu-item:hover {
+        background-color: rgba(13, 225, 231, 0.1);
+        border-left-color: #0DE1E7;
+        transform: translateX(5px);
+    }
+    
+    .admin-menu-item.active {
+        background-color: rgba(13, 225, 231, 0.2);
+        border-left-color: #0DE1E7;
+    }
+    
+    .admin-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-card:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .btn-admin-primary {
+        background: linear-gradient(135deg, #0DE1E7 0%, #0bc4c9 100%);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-admin-primary:hover {
+        background: linear-gradient(135deg, #0bc4c9 0%, #0DE1E7 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 225, 231, 0.4);
+    }
+    
+    .btn-admin-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-admin-danger:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    }
+    
+    .table-row {
+        transition: all 0.2s ease;
+    }
+    
+    .table-row:hover {
+        background-color: #f9fafb;
+        transform: scale(1.01);
+    }
+    
+    .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .badge-success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-warning {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .badge-danger {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .badge-info {
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .slide-in {
+        animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen bg-gray-100 pt-20">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar w-64 fixed left-0 top-20 h-full overflow-y-auto">
+        <div class="p-4">
+            <h2 class="text-xl font-bold text-white mb-6">Menu Admin</h2>
+            
+            <nav class="space-y-2">
+                <a href="{% url 'dashboard:admin_dashboard' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt w-5 mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <div class="text-gray-400 text-xs font-semibold uppercase px-4 py-2 mt-4">Gestion</div>
+                
+                <a href="{% url 'dashboard:manage_users' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-users w-5 mr-3"></i>
+                    <span>Utilisateurs</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_services' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'service' in request.resolver_match.url_name and 'category' not in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-briefcase w-5 mr-3"></i>
+                    <span>Services</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_service_categories' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'service_category' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-folder w-5 mr-3"></i>
+                    <span>Catégories Services</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_requests' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'request' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-file-alt w-5 mr-3"></i>
+                    <span>Demandes</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_certifications' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'certification' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-certificate w-5 mr-3"></i>
+                    <span>Certifications</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_testimonials' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'testimonial' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-quote-left w-5 mr-3"></i>
+                    <span>Témoignages</span>
+                </a>
+                
+                <div class="text-gray-400 text-xs font-semibold uppercase px-4 py-2 mt-4">Blog</div>
+                
+                <a href="{% url 'dashboard:manage_articles' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'article' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-newspaper w-5 mr-3"></i>
+                    <span>Articles</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_blog_categories' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'blog_category' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-tags w-5 mr-3"></i>
+                    <span>Catégories Blog</span>
+                </a>
+                
+                <div class="text-gray-400 text-xs font-semibold uppercase px-4 py-2 mt-4">Contenu</div>
+                
+                <a href="{% url 'dashboard:manage_slider' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'slider' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-images w-5 mr-3"></i>
+                    <span>Slider</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_team' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'team' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-user-friends w-5 mr-3"></i>
+                    <span>Équipe</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_contact_messages' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'contact_message' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-envelope w-5 mr-3"></i>
+                    <span>Messages Contact</span>
+                </a>
+                
+                <a href="{% url 'dashboard:manage_tickets' %}" class="admin-menu-item flex items-center px-4 py-3 text-white rounded-lg {% if 'ticket' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-ticket-alt w-5 mr-3"></i>
+                    <span>Tickets Support</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8 fade-in">
+        {% block admin_content %}{% endblock %}
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animation au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.admin-card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add('fade-in');
+            }, index * 100);
+        });
+    });
+    
+    // Confirmation avant suppression
+    document.querySelectorAll('form[action*="delete"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}
+

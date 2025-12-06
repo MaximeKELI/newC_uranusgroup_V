@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin - Uranus Group{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4">
+        <div class="mb-8" data-aos="fade-up">
+            <h1 class="text-3xl font-bold text-primary-dark mb-2">Dashboard Administrateur</h1>
+            <p class="text-gray-600">Vue d'ensemble de la plateforme</p>
+        </div>
+        
+        <!-- Statistiques -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Utilisateurs</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ total_users }}</p>
+                    </div>
+                    <i class="fas fa-users text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Services</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ total_services }}</p>
+                    </div>
+                    <i class="fas fa-briefcase text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Demandes</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ total_requests }}</p>
+                    </div>
+                    <i class="fas fa-file-alt text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Articles</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ total_articles }}</p>
+                    </div>
+                    <i class="fas fa-newspaper text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Graphique des demandes par statut -->
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up">
+                <h2 class="text-xl font-bold text-primary-dark mb-4">Demandes par statut</h2>
+                <canvas id="requestsChart" height="200"></canvas>
+            </div>
+            
+            <!-- Graphique des utilisateurs par rôle -->
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-xl font-bold text-primary-dark mb-4">Utilisateurs par rôle</h2>
+                <canvas id="usersChart" height="200"></canvas>
+            </div>
+        </div>
+        
+        <!-- Demandes récentes -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8" data-aos="fade-up">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-primary-dark">Demandes récentes</h2>
+                <a href="{% url 'dashboard:manage_requests' %}" class="text-primary-cyan font-semibold hover:underline">
+                    Voir tout <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Titre</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Client</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Service</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Statut</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for req in recent_requests %}
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ req.title }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ req.client.username }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ req.service.name }}</td>
+                            <td class="px-4 py-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold 
+                                    {% if req.status == 'completed' %}bg-green-100 text-green-800
+                                    {% elif req.status == 'in_progress' %}bg-blue-100 text-blue-800
+                                    {% elif req.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ req.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-500">{{ req.created_at|date:"d/m/Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-4 py-3 text-center text-gray-500">Aucune demande</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Actions rapides -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a href="{% url 'dashboard:manage_users' %}" class="bg-white rounded-lg shadow-lg p-6 text-center card-hover" data-aos="fade-up">
+                <i class="fas fa-users text-4xl text-primary-cyan mb-3"></i>
+                <h3 class="font-bold text-primary-dark">Gérer les utilisateurs</h3>
+            </a>
+            
+            <a href="{% url 'dashboard:manage_services' %}" class="bg-white rounded-lg shadow-lg p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-briefcase text-4xl text-primary-cyan mb-3"></i>
+                <h3 class="font-bold text-primary-dark">Gérer les services</h3>
+            </a>
+            
+            <a href="{% url 'dashboard:manage_articles' %}" class="bg-white rounded-lg shadow-lg p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-newspaper text-4xl text-primary-cyan mb-3"></i>
+                <h3 class="font-bold text-primary-dark">Gérer les articles</h3>
+            </a>
+            
+            <a href="{% url 'dashboard:manage_tickets' %}" class="bg-white rounded-lg shadow-lg p-6 text-center card-hover" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-ticket-alt text-4xl text-primary-cyan mb-3"></i>
+                <h3 class="font-bold text-primary-dark">Tickets support</h3>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Chart des demandes par statut
+    const requestsCtx = document.getElementById('requestsChart');
+    if (requestsCtx) {
+        const requestsData = {{ requests_by_status|safe }};
+        const labels = requestsData.map(item => {
+            const statusMap = {
+                'pending': 'En attente',
+                'in_progress': 'En cours',
+                'completed': 'Terminé',
+                'cancelled': 'Annulé'
+            };
+            return statusMap[item.status] || item.status;
+        });
+        const data = requestsData.map(item => item.count);
+        
+        new Chart(requestsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        '#FCD34D',
+                        '#60A5FA',
+                        '#34D399',
+                        '#9CA3AF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+    
+    // Chart des utilisateurs par rôle
+    const usersCtx = document.getElementById('usersChart');
+    if (usersCtx) {
+        const usersData = {{ users_by_role|safe }};
+        const labels = usersData.map(item => {
+            const roleMap = {
+                'admin': 'Administrateur',
+                'manager_qhse': 'Manager QHSE',
+                'manager_info': 'Manager Info',
+                'client': 'Client'
+            };
+            return roleMap[item.role] || item.role;
+        });
+        const data = usersData.map(item => item.count);
+        
+        new Chart(usersCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Utilisateurs',
+                    data: data,
+                    backgroundColor: '#0DE1E7'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
+

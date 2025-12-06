@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4">
+        <div class="mb-8" data-aos="fade-up">
+            <h1 class="text-3xl font-bold text-primary-dark mb-2">Tableau de bord</h1>
+            <p class="text-gray-600">Bienvenue, {{ user.username }} !</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Mes demandes</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ requests|length }}</p>
+                    </div>
+                    <i class="fas fa-file-alt text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Notifications</p>
+                        <p class="text-3xl font-bold text-primary-dark">{{ notifications|length }}</p>
+                    </div>
+                    <i class="fas fa-bell text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Rôle</p>
+                        <p class="text-lg font-bold text-primary-dark">{{ user.get_role_display }}</p>
+                    </div>
+                    <i class="fas fa-user-circle text-4xl text-primary-cyan"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up">
+                <h2 class="text-xl font-bold text-primary-dark mb-4">Mes demandes récentes</h2>
+                {% if requests %}
+                <div class="space-y-4">
+                    {% for req in requests %}
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-primary-dark">{{ req.title }}</h3>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold 
+                                {% if req.status == 'completed' %}bg-green-100 text-green-800
+                                {% elif req.status == 'in_progress' %}bg-blue-100 text-blue-800
+                                {% elif req.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ req.get_status_display }}
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">{{ req.service.name }}</p>
+                        <a href="{% url 'services:request_detail' req.id %}" class="text-primary-cyan text-sm hover:underline">
+                            Voir les détails <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'services:my_requests' %}" class="text-primary-cyan font-semibold hover:underline">
+                        Voir toutes mes demandes
+                    </a>
+                </div>
+                {% else %}
+                <p class="text-gray-500">Aucune demande pour le moment.</p>
+                <a href="{% url 'services:service_list' %}" class="btn-primary px-4 py-2 rounded-lg inline-block mt-4">
+                    Créer une demande
+                </a>
+                {% endif %}
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-xl font-bold text-primary-dark mb-4">Notifications</h2>
+                {% if notifications %}
+                <div class="space-y-3">
+                    {% for notif in notifications %}
+                    <div class="border-l-4 border-primary-cyan bg-gray-50 p-3 rounded">
+                        <h4 class="font-semibold text-primary-dark text-sm">{{ notif.title }}</h4>
+                        <p class="text-xs text-gray-600 mt-1">{{ notif.message|truncatewords:15 }}</p>
+                        <p class="text-xs text-gray-400 mt-2">{{ notif.created_at|timesince }} ago</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'dashboard:notifications' %}" class="text-primary-cyan font-semibold hover:underline">
+                        Voir toutes les notifications
+                    </a>
+                </div>
+                {% else %}
+                <p class="text-gray-500">Aucune notification.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <a href="{% url 'accounts:profile' %}" class="btn-primary px-6 py-3 rounded-lg inline-block">
+                <i class="fas fa-user mr-2"></i> Modifier mon profil
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

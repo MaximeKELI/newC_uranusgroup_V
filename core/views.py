@@ -1,0 +1,120 @@
+"""
+Vues pour l'app core (home, contact, à propos)
+"""
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from django.views.decorators.http import require_http_methods
+from .models import ContactMessage, TeamMember, SliderItem
+from services.models import Service, ServiceCategory, Certification, Testimonial
+
+
+def home(request):
+    """
+    Landing page avec slider, sections QHSE/Informatique, certifications, témoignages
+    """
+    slider_items = SliderItem.objects.filter(active=True).order_by('order')
+    qhse_category = ServiceCategory.objects.filter(slug='qhse').first()
+    info_category = ServiceCategory.objects.filter(slug='informatique').first()
+    
+    qhse_services = Service.objects.filter(category=qhse_category, status='active', featured=True)[:6] if qhse_category else []
+    info_services = Service.objects.filter(category=info_category, status='active', featured=True)[:6] if info_category else []
+    
+    certifications = Certification.objects.all().order_by('order')[:8]
+    testimonials = Testimonial.objects.filter(featured=True).order_by('order')[:6]
+    
+    context = {
+        'slider_items': slider_items,
+        'qhse_services': qhse_services,
+        'info_services': info_services,
+        'certifications': certifications,
+        'testimonials': testimonials,
+    }
+    return render(request, 'core/home.html', context)
+
+
+def about(request):
+    """
+    Page À propos avec membres de l'équipe
+    """
+    team_members = TeamMember.objects.all().order_by('order')
+    context = {
+        'team_members': team_members,
+    }
+    return render(request, 'core/about.html', context)
+
+
+@require_http_methods(["GET", "POST"])
+def contact(request):
+    """
+    Page contact avec formulaire
+    """
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone', '')
+        company = request.POST.get('company', '')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        
+        # Validation
+        if not all([name, email, subject, message]):
+            messages.error(request, 'Veuillez remplir tous les champs obligatoires.')
+            return render(request, 'core/contact.html')
+        
+        # Sauvegarder le message
+        contact_message = ContactMessage.objects.create(
+            name=name,
+            email=email,
+            phone=phone,
+            company=company,
+            subject=subject,
+            message=message
+        )
+        
+        # Envoyer un email
+        try:
+            send_mail(
+                subject=f'[Uranus Group] Nouveau message: {subject}',
+                message=f'''
+Nouveau message de contact:
+
+Nom: {name}
+Email: {email}
+Téléphone: {phone}
+Entreprise: {company}
+
+Message:
+{message}
+                ''',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.DEFAULT_FROM_EMAIL],
+                fail_silently=False,
+            )
+            
+            # Email de confirmation au client
+            send_mail(
+                subject='[Uranus Group] Confirmation de réception de votre message',
+                message=f'''
+Bonjour {name},
+
+Nous avons bien reçu votre message concernant "{subject}".
+
+Notre équipe vous répondra dans les plus brefs délais.
+
+Cordialement,
+L'équipe Uranus Group
+                ''',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            # En cas d'erreur d'email, on continue quand même
+            pass
+        
+        messages.success(request, 'Votre message a été envoyé avec succès. Nous vous répondrons bientôt.')
+        return redirect('core:contact')
+    
+    return render(request, 'core/contact.html')

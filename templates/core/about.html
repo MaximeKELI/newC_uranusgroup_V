@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}À propos - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary-dark mb-4">À propos de Uranus Group</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Expert en QHSE et Informatique, nous accompagnons les entreprises dans leur transformation digitale et leur conformité réglementaire.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
+            <div data-aos="fade-right">
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">Notre mission</h2>
+                <p class="text-gray-700 mb-4">
+                    Uranus Group est une entreprise spécialisée dans l'accompagnement des organisations vers l'excellence opérationnelle. 
+                    Nous combinons expertise en Qualité, Hygiène, Sécurité, Environnement (QHSE) et solutions informatiques innovantes.
+                </p>
+                <p class="text-gray-700 mb-4">
+                    Notre mission est d'aider nos clients à optimiser leurs processus, obtenir leurs certifications ISO, 
+                    et sécuriser leurs systèmes d'information grâce à des solutions sur mesure.
+                </p>
+            </div>
+            
+            <div data-aos="fade-left">
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">Nos valeurs</h2>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary-cyan text-xl mr-3 mt-1"></i>
+                        <span><strong>Excellence:</strong> Nous visons l'excellence dans chaque projet que nous menons.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary-cyan text-xl mr-3 mt-1"></i>
+                        <span><strong>Innovation:</strong> Nous restons à la pointe de la technologie pour offrir les meilleures solutions.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary-cyan text-xl mr-3 mt-1"></i>
+                        <span><strong>Intégrité:</strong> Transparence et éthique dans toutes nos relations.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary-cyan text-xl mr-3 mt-1"></i>
+                        <span><strong>Partage:</strong> Nous partageons notre expertise pour faire grandir nos clients.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="mb-20" data-aos="fade-up">
+            <h2 class="text-3xl font-bold text-primary-dark mb-8 text-center">Notre équipe</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for member in team_members %}
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center card-hover">
+                    {% if member.photo %}
+                    <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    {% else %}
+                    <div class="w-32 h-32 rounded-full bg-primary-cyan mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold">
+                        {{ member.name|first }}
+                    </div>
+                    {% endif %}
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">{{ member.name }}</h3>
+                    <p class="text-primary-cyan font-semibold mb-4">{{ member.position }}</p>
+                    {% if member.bio %}
+                    <p class="text-gray-600 text-sm">{{ member.bio|truncatewords:20 }}</p>
+                    {% endif %}
+                    {% if member.linkedin %}
+                    <a href="{{ member.linkedin }}" target="_blank" class="text-primary-cyan hover:text-primary-dark mt-4 inline-block">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center text-gray-500">
+                    <p>L'équipe sera bientôt présentée.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Services - Uranus Group{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary-dark mb-4">Nos Services</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Découvrez notre gamme complète de services QHSE et Informatique</p>
+        </div>
+        
+        <!-- Filtres -->
+        <div class="mb-8 flex flex-wrap gap-4 justify-center" data-aos="fade-up">
+            <a href="{% url 'services:service_list' %}" class="px-4 py-2 rounded-lg {% if not current_category %}bg-primary-cyan text-white{% else %}bg-gray-200 text-gray-700{% endif %}">
+                Tous
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'services:service_list' %}?category={{ category.slug }}" class="px-4 py-2 rounded-lg {% if current_category == category.slug %}bg-primary-cyan text-white{% else %}bg-gray-200 text-gray-700{% endif %}">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+        
+        <!-- Recherche -->
+        <div class="mb-8" data-aos="fade-up">
+            <form method="get" class="max-w-md mx-auto">
+                <div class="flex">
+                    <input type="text" name="search" value="{{ search }}" placeholder="Rechercher un service..." class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+                    <button type="submit" class="btn-primary px-6 py-3 rounded-r-lg">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Liste des services -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for service in services %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:100 }}">
+                {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-48 object-cover">
+                {% endif %}
+                <div class="p-6">
+                    {% if service.icon %}
+                    <div class="text-4xl text-primary-cyan mb-4">
+                        <i class="{{ service.icon }}"></i>
+                    </div>
+                    {% endif %}
+                    <h3 class="text-2xl font-bold text-primary-dark mb-3">{{ service.name }}</h3>
+                    <p class="text-gray-600 mb-4">{{ service.short_description|truncatewords:25 }}</p>
+                    <div class="flex items-center justify-between">
+                        <a href="{% url 'services:service_detail' service.slug %}" class="text-primary-cyan font-semibold hover:underline">
+                            En savoir plus <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'services:request_service' service.id %}" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
+                            Demander
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500 py-12">
+                <i class="fas fa-search text-6xl mb-4"></i>
+                <p class="text-xl">Aucun service trouvé.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+

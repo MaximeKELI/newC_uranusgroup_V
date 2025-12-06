@@ -52,8 +52,9 @@
                 <tr class="table-row">
                     <td class="px-6 py-4">
                         <div class="flex items-center">
-                            {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="w-10 h-10 rounded-full mr-3">
+                            {% load safe_image %}
+                            {% if user.avatar|safe_url %}
+                            <img src="{{ user.avatar|safe_url }}" alt="{{ user.username }}" class="w-10 h-10 rounded-full mr-3 object-cover">
                             {% else %}
                             <div class="w-10 h-10 rounded-full bg-primary-cyan flex items-center justify-center text-white font-bold mr-3">
                                 {{ user.username|first|upper }}

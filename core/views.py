@@ -24,12 +24,33 @@ def home(request):
     certifications = Certification.objects.all().order_by('order')[:8]
     testimonials = Testimonial.objects.filter(featured=True).order_by('order')[:6]
     
+    # Filtrer les slider items qui ont des images valides
+    valid_slider_items = []
+    for item in slider_items:
+        try:
+            if item.image and item.image.url:
+                valid_slider_items.append(item)
+        except (ValueError, AttributeError):
+            pass
+    
+    # Filtrer les certifications - inclure toutes même sans images
+    valid_certifications = list(certifications)
+    
+    # Filtrer les témoignages qui ont des avatars valides
+    valid_testimonials = []
+    for testimonial in testimonials:
+        try:
+            # Toujours inclure, même sans avatar
+            valid_testimonials.append(testimonial)
+        except (ValueError, AttributeError):
+            valid_testimonials.append(testimonial)
+    
     context = {
-        'slider_items': slider_items,
+        'slider_items': valid_slider_items,
         'qhse_services': qhse_services,
         'info_services': info_services,
-        'certifications': certifications,
-        'testimonials': testimonials,
+        'certifications': valid_certifications,
+        'testimonials': valid_testimonials,
     }
     return render(request, 'core/home.html', context)
 

@@ -1,9 +1,12 @@
 """
 Vues pour les services QHSE et Informatique
 """
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.utils import timezone
+from datetime import datetime
+from accounts.models import User
 from .models import Service, ServiceCategory, ServiceRequest, Deliverable
 
 
@@ -66,7 +69,20 @@ def request_service(request, service_id):
         title = request.POST.get('title')
         description = request.POST.get('description')
         priority = request.POST.get('priority', 'medium')
-        deadline = request.POST.get('deadline') or None
+        deadline_str = request.POST.get('deadline') or None
+        
+        # Convertir la date en datetime avec timezone si fournie
+        deadline = None
+        if deadline_str:
+            try:
+                deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%dT%H:%M')
+                deadline = timezone.make_aware(deadline_dt)
+            except (ValueError, TypeError):
+                try:
+                    deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%d')
+                    deadline = timezone.make_aware(deadline_dt)
+                except (ValueError, TypeError):
+                    deadline = None
         
         if title and description:
             service_request = ServiceRequest.objects.create(
@@ -80,7 +96,7 @@ def request_service(request, service_id):
             
             # Créer une notification pour les managers
             from dashboard.models import Notification
-            managers = request.user.__class__.objects.filter(
+            managers = User.objects.filter(
                 Q(role='manager_qhse') | Q(role='manager_info') | Q(role='admin')
             )
             for manager in managers:

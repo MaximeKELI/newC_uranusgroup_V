@@ -135,6 +135,20 @@
     <!-- Sidebar -->
     <aside class="admin-sidebar w-64 fixed left-0 top-20 h-full overflow-y-auto">
         <div class="p-4">
+            {% load safe_image %}
+            <div class="flex items-center space-x-3 mb-6 pb-6 border-b border-gray-700">
+                {% if user.avatar|safe_url %}
+                <img src="{{ user.avatar|safe_url }}" alt="{{ user.username }}" class="w-12 h-12 rounded-full object-cover border-2 border-primary-cyan">
+                {% else %}
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-cyan to-primary-dark flex items-center justify-center text-white font-bold border-2 border-primary-cyan">
+                    {{ user.username|first|upper }}
+                </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-lg font-bold text-white">{{ user.get_full_name|default:user.username }}</h2>
+                    <p class="text-xs text-gray-400">{{ user.get_role_display }}</p>
+                </div>
+            </div>
             <h2 class="text-xl font-bold text-white mb-6">Menu Admin</h2>
             
             <nav class="space-y-2">

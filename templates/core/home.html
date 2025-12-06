@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load safe_image %}
 
 {% block title %}Accueil - Uranus Group{% endblock %}
 
@@ -69,7 +70,13 @@
     {% for item in slider_items %}
     <div class="slide {% if forloop.first %}active{% endif %}">
         <div class="slide-overlay"></div>
-        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+        {% if item.image|safe_url %}
+        <img src="{{ item.image|safe_url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+        {% else %}
+        <div class="w-full h-full bg-gradient-to-r from-primary-dark to-primary-cyan flex items-center justify-center">
+            <h2 class="text-white text-4xl font-bold">{{ item.title }}</h2>
+        </div>
+        {% endif %}
         <div class="slide-content">
             <h1 class="text-5xl md:text-7xl font-bold mb-4" data-aos="fade-up">{{ item.title }}</h1>
             <p class="text-xl md:text-2xl mb-8 text-gray-200" data-aos="fade-up" data-aos-delay="200">{{ item.subtitle }}</p>
@@ -189,8 +196,8 @@
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
             {% for cert in certifications %}
             <div class="certification-logo text-center" data-aos="zoom-in" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
-                {% if cert.image %}
-                <img src="{{ cert.image.url }}" alt="{{ cert.name }}" class="w-full h-32 object-contain mx-auto mb-4">
+                {% if cert.image|safe_url %}
+                <img src="{{ cert.image|safe_url }}" alt="{{ cert.name }}" class="w-full h-32 object-contain mx-auto mb-4">
                 {% endif %}
                 <h4 class="font-semibold text-primary-dark">{{ cert.code }}</h4>
                 <p class="text-sm text-gray-600">{{ cert.name }}</p>
@@ -217,7 +224,9 @@
             <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 <div class="flex items-center mb-4">
                     {% if testimonial.client_avatar %}
-                    <img src="{{ testimonial.client_avatar.url }}" alt="{{ testimonial.client_name }}" class="w-16 h-16 rounded-full mr-4">
+                    {% if testimonial.client_avatar|safe_url %}
+                    <img src="{{ testimonial.client_avatar|safe_url }}" alt="{{ testimonial.client_name }}" class="w-16 h-16 rounded-full mr-4">
+                    {% endif %}
                     {% else %}
                     <div class="w-16 h-16 rounded-full bg-primary-cyan flex items-center justify-center text-white text-2xl font-bold mr-4">
                         {{ testimonial.client_name|first }}

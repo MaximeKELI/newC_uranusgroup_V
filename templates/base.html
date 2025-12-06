@@ -105,8 +105,21 @@
                     <a href="{% url 'core:contact' %}" class="hover:text-primary-cyan transition">Contact</a>
                     
                     {% if user.is_authenticated %}
+                        {% load safe_image %}
+                        <div class="flex items-center space-x-3">
+                            <a href="{% url 'accounts:profile' %}" class="flex items-center space-x-2 hover:opacity-80 transition group">
+                                {% if user.avatar|safe_url %}
+                                <img src="{{ user.avatar|safe_url }}" alt="{{ user.username }}" class="w-10 h-10 rounded-full object-cover border-2 border-primary-cyan group-hover:border-white transition">
+                                {% else %}
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-dark to-primary-cyan flex items-center justify-center text-white text-sm font-bold border-2 border-primary-cyan group-hover:border-white transition">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                {% endif %}
+                                <span class="text-white">{{ user.get_full_name|default:user.username }}</span>
+                            </a>
+                        </div>
                         <a href="{% url 'accounts:dashboard' %}" class="hover:text-primary-cyan transition">
-                            <i class="fas fa-user-circle"></i> Dashboard
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
                         {% if user.is_admin %}
                             <a href="{% url 'dashboard:admin_dashboard' %}" class="hover:text-primary-cyan transition">
@@ -141,7 +154,24 @@
                 <a href="{% url 'core:contact' %}" class="block hover:text-primary-cyan transition">Contact</a>
                 
                 {% if user.is_authenticated %}
+                    {% load safe_image %}
+                    <div class="flex items-center space-x-3 mb-3 pb-3 border-b border-gray-700">
+                        <a href="{% url 'accounts:profile' %}" class="flex items-center space-x-2 hover:opacity-80 transition w-full">
+                            {% if user.avatar|safe_url %}
+                            <img src="{{ user.avatar|safe_url }}" alt="{{ user.username }}" class="w-12 h-12 rounded-full object-cover border-2 border-primary-cyan">
+                            {% else %}
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-dark to-primary-cyan flex items-center justify-center text-white font-bold border-2 border-primary-cyan">
+                                {{ user.username|first|upper }}
+                            </div>
+                            {% endif %}
+                            <div class="flex-1">
+                                <p class="text-white font-semibold">{{ user.get_full_name|default:user.username }}</p>
+                                <p class="text-xs text-gray-400">{{ user.get_role_display }}</p>
+                            </div>
+                        </a>
+                    </div>
                     <a href="{% url 'accounts:dashboard' %}" class="block hover:text-primary-cyan transition">Dashboard</a>
+                    <a href="{% url 'accounts:profile' %}" class="block hover:text-primary-cyan transition">Mon profil</a>
                     {% if user.is_admin %}
                         <a href="{% url 'dashboard:admin_dashboard' %}" class="block hover:text-primary-cyan transition">Admin</a>
                     {% endif %}

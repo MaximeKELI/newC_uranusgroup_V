@@ -1,0 +1,64 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">
+                {% if action == 'create' %}Créer un membre{% else %}Modifier le membre{% endif %}
+            </h1>
+        </div>
+        <a href="{% url 'dashboard:manage_team' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">
+            <i class="fas fa-arrow-left mr-2"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="admin-card p-8" data-aos="fade-up">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom *</label>
+                <input type="text" name="name" value="{% if member %}{{ member.name }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Poste *</label>
+                <input type="text" name="position" value="{% if member %}{{ member.position }}{% endif %}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                <input type="email" name="email" value="{% if member %}{{ member.email }}{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">LinkedIn</label>
+                <input type="url" name="linkedin" value="{% if member %}{{ member.linkedin }}{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Ordre</label>
+                <input type="number" name="order" value="{% if member %}{{ member.order }}{% else %}0{% endif %}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+            </div>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Biographie</label>
+            <textarea name="bio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">{% if member %}{{ member.bio }}{% endif %}</textarea>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Photo</label>
+            {% if member and member.photo %}
+            <div class="mb-2">
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-24 h-24 rounded-full object-cover">
+            </div>
+            {% endif %}
+            <input type="file" name="photo" accept="image/*" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-cyan focus:border-transparent">
+        </div>
+        <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+            <a href="{% url 'dashboard:manage_team' %}" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition">Annuler</a>
+            <button type="submit" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-save mr-2"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

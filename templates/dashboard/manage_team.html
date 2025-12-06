@@ -1,0 +1,51 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block admin_content %}
+<div class="mb-8" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-primary-dark mb-2">Gestion de l'Équipe</h1>
+            <p class="text-gray-600">Gérez les membres de l'équipe</p>
+        </div>
+        <a href="{% url 'dashboard:team_member_create' %}" class="btn-admin-primary px-6 py-3 rounded-lg font-semibold">
+            <i class="fas fa-plus mr-2"></i> Nouveau membre
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for member in members %}
+    <div class="admin-card p-6 text-center" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:50 }}">
+        {% if member.photo %}
+        <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+        {% else %}
+        <div class="w-24 h-24 rounded-full bg-primary-cyan mx-auto mb-4 flex items-center justify-center text-white text-3xl font-bold">
+            {{ member.name|first }}
+        </div>
+        {% endif %}
+        <h3 class="text-xl font-bold text-primary-dark mb-2">{{ member.name }}</h3>
+        <p class="text-primary-cyan font-semibold mb-3">{{ member.position }}</p>
+        {% if member.bio %}
+        <p class="text-gray-600 text-sm mb-4">{{ member.bio|truncatewords:15 }}</p>
+        {% endif %}
+        <div class="flex items-center justify-center space-x-4">
+            <a href="{% url 'dashboard:team_member_edit' member.id %}" class="text-primary-cyan hover:text-primary-dark transition">
+                <i class="fas fa-edit"></i>
+            </a>
+            <form method="post" action="{% url 'dashboard:team_member_delete' member.id %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="text-red-500 hover:text-red-700 transition" onclick="return confirm('Êtes-vous sûr ?')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full admin-card p-12 text-center">
+        <i class="fas fa-user-friends text-6xl text-gray-400 mb-4"></i>
+        <p class="text-xl text-gray-600">Aucun membre.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

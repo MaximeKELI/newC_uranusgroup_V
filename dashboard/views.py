@@ -1057,9 +1057,17 @@ def ticket_detail(request, ticket_id):
             messages.success(request, 'Message envoyé.')
             return redirect('dashboard:ticket_detail', ticket_id=ticket.id)
     
+    # Pour l'admin, récupérer la liste des utilisateurs pour l'assignation
+    users = None
+    if request.user.is_admin():
+        users = User.objects.filter(
+            Q(role='admin') | Q(role='manager_qhse') | Q(role='manager_info')
+        )
+    
     context = {
         'ticket': ticket,
         'messages': messages_list,
+        'users': users,
     }
     return render(request, 'dashboard/ticket_detail.html', context)
 

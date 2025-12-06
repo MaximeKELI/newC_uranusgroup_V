@@ -19,11 +19,13 @@ try:
     USE_DECOUPLE = True
 except ImportError:
     USE_DECOUPLE = False
+
     def config(key, default=None, cast=None):
         value = os.environ.get(key, default)
         if cast and value:
             return cast(value)
         return value
+
     def Csv(value):
         if isinstance(value, str):
             return [v.strip() for v in value.split(',') if v.strip()]
@@ -37,7 +39,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default="django-insecure-r*^x8x@o$)aszc+pha7htuk7inlp)#o@ldz+n#wjr(li@__+v1")
+DEFAULT_SECRET_KEY = (
+    "django-insecure-r*^x8x@o$)aszc+pha7htuk7inlp)#o@ldz+n#wjr(li@__+v1"
+)
+SECRET_KEY = config('SECRET_KEY', default=DEFAULT_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
@@ -67,7 +72,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Pour servir les fichiers statiques en production
+    # WhiteNoise pour servir les fichiers statiques en production
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -92,8 +93,9 @@
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-2">
-                    <a href="{% url 'core:home' %}" class="text-2xl font-bold text-primary-cyan">
-                        <i class="fas fa-globe"></i> Uranus Group
+                    <a href="{% url 'core:home' %}" class="flex items-center text-2xl font-bold text-primary-cyan space-x-2">
+                        <img src="{% static 'images/uranus_group_logo.png' %}" alt="Uranus Group Logo" class="h-10 w-10 object-contain">
+                        <span>Uranus Group</span>
                     </a>
                 </div>
                 

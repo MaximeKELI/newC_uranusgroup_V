@@ -88,7 +88,10 @@ ROOT_URLCONF = "uranusgroup.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates",
+            os.path.join(BASE_DIR, 'templates/admin'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -251,6 +254,12 @@ CORS_ALLOW_CREDENTIALS = True
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Configuration de l'authentification
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Configuration du cache (Redis en production, local en développement)
 if not DEBUG:

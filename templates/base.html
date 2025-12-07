@@ -128,9 +128,12 @@
                                 <i class="fas fa-cog"></i> Admin
                             </a>
                         {% endif %}
-                        <a href="{% url 'accounts:logout' %}" class="hover:text-primary-cyan transition">
-                            <i class="fas fa-sign-out-alt"></i> Déconnexion
-                        </a>
+                        <form action="{% url 'accounts:logout' %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="hover:text-primary-cyan transition bg-transparent border-none p-0 m-0 cursor-pointer">
+                                <i class="fas fa-sign-out-alt"></i> Déconnexion
+                            </button>
+                        </form>
                     {% else %}
                         <a href="{% url 'accounts:login' %}" class="hover:text-primary-cyan transition">Connexion</a>
                         <a href="{% url 'accounts:register' %}" class="btn-primary px-4 py-2 rounded-lg font-semibold">
@@ -177,7 +180,12 @@
                     {% if user.is_admin %}
                         <a href="{% url 'dashboard:admin_dashboard' %}" class="block hover:text-primary-cyan transition">Admin</a>
                     {% endif %}
-                    <a href="{% url 'accounts:logout' %}" class="block hover:text-primary-cyan transition">Déconnexion</a>
+                    <form action="{% url 'accounts:logout' %}" method="post" class="block">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-primary-cyan transition bg-transparent border-none p-0 m-0 cursor-pointer w-full text-left">
+                            Déconnexion
+                        </button>
+                    </form>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="block hover:text-primary-cyan transition">Connexion</a>
                     <a href="{% url 'accounts:register' %}" class="block btn-primary px-4 py-2 rounded-lg font-semibold text-center">Inscription</a>

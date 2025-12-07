@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 text-center">
+        <div>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                Vous avez été déconnecté avec succès
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                Merci d'avoir utilisé notre service.
+            </p>
+        </div>
+        <div class="mt-8">
+            <a href="{% url 'core:home' %}" 
+               class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-cyan hover:bg-primary-cyan-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-cyan">
+                Retour à l'accueil
+            </a>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-primary-600 hover:text-primary-500">
+                Se reconnecter ?
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

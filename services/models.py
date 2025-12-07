@@ -17,6 +17,7 @@ class ServiceCategory(models.Model):
     icon = models.CharField(max_length=50, blank=True, verbose_name="Icône")
     color = models.CharField(max_length=7, default="#0DE1E7", verbose_name="Couleur")
     order = models.IntegerField(default=0, verbose_name="Ordre d'affichage")
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
     
     class Meta:
         verbose_name = "Catégorie de service"
@@ -66,6 +67,7 @@ class Service(models.Model):
     order = models.IntegerField(default=0, verbose_name="Ordre d'affichage")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Date de mise à jour")
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
     
     class Meta:
         verbose_name = "Service"
@@ -132,6 +134,7 @@ class ServiceRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Date de mise à jour")
     completed_at = models.DateTimeField(null=True, blank=True, verbose_name="Date de complétion")
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
     
     class Meta:
         verbose_name = "Demande de service"
@@ -162,6 +165,7 @@ class Deliverable(models.Model):
         verbose_name="Uploadé par"
     )
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Date d'upload")
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
     
     class Meta:
         verbose_name = "Livrable"

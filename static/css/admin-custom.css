@@ -1,0 +1,181 @@
+/* Style général de l'administration */
+:root {
+    --primary-dark: #0A1A2F;
+    --primary-cyan: #0DE1E7;
+    --primary-cyan-light: rgba(13, 225, 231, 0.1);
+    --gradient-dark: linear-gradient(135deg, #0A1A2F 0%, #1A3A5F 100%);
+    --gradient-cyan: linear-gradient(135deg, #0DE1E7 0%, #0A8E94 100%);
+}
+
+/* En-tête de l'administration */
+#header {
+    background: var(--gradient-dark);
+    color: white;
+    padding: 15px 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+#header:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-cyan);
+}
+
+#branding h1 {
+    color: white !important;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 1.5rem;
+}
+
+#branding h1 a:link, 
+#branding h1 a:visited {
+    color: white !important;
+}
+
+/* Navigation latérale */
+#content {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#content-main {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Boutons */
+.button, 
+input[type="submit"], 
+input[type="button"], 
+.submit-row input, 
+a.button {
+    background: var(--gradient-cyan);
+    border: none;
+    border-radius: 4px;
+    color: white !important;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover, 
+input[type="submit"]:hover, 
+input[type="button"]:hover, 
+.submit-row input:hover, 
+a.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+}
+
+/* Tableaux */
+#changelist table thead th {
+    background: var(--primary-dark);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+#changelist table tbody tr:hover {
+    background-color: var(--primary-cyan-light);
+    transition: background-color 0.3s ease;
+}
+
+/* Formulaire */
+fieldset {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+fieldset h2 {
+    background: var(--gradient-dark);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px 6px 0 0;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    #content {
+        margin-left: 0;
+    }
+}
+
+/* Personnalisation des messages */
+.messagelist li {
+    padding: 12px 20px;
+    margin: 10px 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Personnalisation des onglets */
+.tabular table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.tabular td {
+    padding: 12px;
+    vertical-align: top;
+}
+
+/* Amélioration des champs de formulaire */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px 12px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 3px rgba(13, 225, 231, 0.2);
+    outline: none;
+}

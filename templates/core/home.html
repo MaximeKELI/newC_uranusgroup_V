@@ -46,10 +46,22 @@
     
     .service-card {
         transition: all 0.3s ease;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
     }
     
     .service-card:hover {
         transform: translateY(-10px);
+    }
+    
+    /* S'assurer que les services sont visibles même si AOS ne fonctionne pas */
+    [data-aos] {
+        opacity: 1 !important;
+    }
+    
+    .aos-init[data-aos] {
+        opacity: 1 !important;
     }
     
     .certification-logo {
@@ -118,24 +130,24 @@
             <h2 class="text-4xl md:text-5xl font-bold text-primary-dark mb-4">Services QHSE</h2>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">Accompagnement professionnel pour vos certifications ISO et systèmes de management</p>
         </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for service in qhse_services %}
-            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 100 %}">
+            {% for service in qhse_services|slice:":3" %}
+            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" style="opacity: 1 !important; visibility: visible !important; display: block !important;">
                 {% if service.icon %}
                 <div class="text-4xl text-primary-cyan mb-4">
                     <i class="{{ service.icon }}"></i>
                 </div>
                 {% endif %}
                 <h3 class="text-2xl font-bold text-primary-dark mb-3">{{ service.name }}</h3>
-                <p class="text-gray-600 mb-4">{{ service.short_description|truncatewords:20 }}</p>
+                <p class="text-gray-600 mb-4">{{ service.short_description|truncatewords:20|default:"Description non disponible" }}</p>
                 <a href="{% url 'services:service_detail' service.slug %}" class="text-primary-cyan font-semibold hover:underline">
                     En savoir plus <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
             {% empty %}
-            <div class="col-span-full text-center text-gray-500">
-                <p>Aucun service QHSE disponible pour le moment.</p>
+            <div class="col-span-full text-center text-gray-500 py-8">
+                <p class="text-lg">Aucun service QHSE disponible pour le moment.</p>
+                <p class="text-sm mt-2">Debug: qhse_services count = {{ qhse_services|length }}</p>
             </div>
             {% endfor %}
         </div>
@@ -157,22 +169,23 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for service in info_services %}
-            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter 1 100 %}">
+            {% for service in info_services|slice:":3" %}
+            <div class="service-card bg-white rounded-lg shadow-lg p-6 border border-gray-200" style="opacity: 1 !important; visibility: visible !important; display: block !important;">
                 {% if service.icon %}
                 <div class="text-4xl text-primary-cyan mb-4">
                     <i class="{{ service.icon }}"></i>
                 </div>
                 {% endif %}
                 <h3 class="text-2xl font-bold text-primary-dark mb-3">{{ service.name }}</h3>
-                <p class="text-gray-600 mb-4">{{ service.short_description|truncatewords:20 }}</p>
+                <p class="text-gray-600 mb-4">{{ service.short_description|truncatewords:20|default:"Description non disponible" }}</p>
                 <a href="{% url 'services:service_detail' service.slug %}" class="text-primary-cyan font-semibold hover:underline">
                     En savoir plus <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
             {% empty %}
-            <div class="col-span-full text-center text-gray-500">
-                <p>Aucun service Informatique disponible pour le moment.</p>
+            <div class="col-span-full text-center text-gray-500 py-8">
+                <p class="text-lg">Aucun service Informatique disponible pour le moment.</p>
+                <p class="text-sm mt-2">Debug: info_services count = {{ info_services|length }}</p>
             </div>
             {% endfor %}
         </div>
@@ -194,6 +207,7 @@
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
+            {% if certifications %}
             {% for cert in certifications %}
             <div class="certification-logo text-center" data-aos="zoom-in" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 {% if cert.image|safe_url %}
@@ -202,11 +216,14 @@
                 <h4 class="font-semibold text-primary-dark">{{ cert.code }}</h4>
                 <p class="text-sm text-gray-600">{{ cert.name }}</p>
             </div>
-            {% empty %}
+            {% endfor %}
+
+            {% else %}
             <div class="col-span-full text-center text-gray-500">
                 <p>Aucune certification disponible pour le moment.</p>
             </div>
-            {% endfor %}
+            {% endif %}
+
         </div>
     </div>
 </section>
@@ -220,6 +237,7 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if testimonials %}
             {% for testimonial in testimonials %}
             <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                 <div class="flex items-center mb-4">
@@ -247,11 +265,13 @@
                 </div>
                 <p class="text-gray-700 italic">"{{ testimonial.content|truncatewords:30 }}"</p>
             </div>
-            {% empty %}
+            {% endfor %}
+
+            {% else %}
             <div class="col-span-full text-center text-gray-500">
                 <p>Aucun témoignage disponible pour le moment.</p>
             </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </section>

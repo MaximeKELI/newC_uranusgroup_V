@@ -15,11 +15,21 @@ def home(request):
     Landing page avec slider, sections QHSE/Informatique, certifications, témoignages
     """
     slider_items = SliderItem.objects.filter(active=True).order_by('order')
-    qhse_category = ServiceCategory.objects.filter(slug='qhse').first()
-    info_category = ServiceCategory.objects.filter(slug='informatique').first()
+    qhse_category = ServiceCategory.objects.filter(slug='qhse', is_active=True).first()
+    info_category = ServiceCategory.objects.filter(slug='informatique', is_active=True).first()
     
-    qhse_services = Service.objects.filter(category=qhse_category, status='active', featured=True)[:6] if qhse_category else []
-    info_services = Service.objects.filter(category=info_category, status='active', featured=True)[:6] if info_category else []
+    # Récupérer les services et convertir en liste pour éviter les problèmes de QuerySet vide
+    if qhse_category:
+        qhse_services_qs = Service.objects.filter(category=qhse_category, status='active', is_active=True).order_by('order')[:6]
+        qhse_services = list(qhse_services_qs)
+    else:
+        qhse_services = []
+    
+    if info_category:
+        info_services_qs = Service.objects.filter(category=info_category, status='active', is_active=True).order_by('order')[:6]
+        info_services = list(info_services_qs)
+    else:
+        info_services = []
     
     certifications = Certification.objects.all().order_by('order')[:8]
     testimonials = Testimonial.objects.filter(featured=True).order_by('order')[:6]
@@ -49,6 +59,8 @@ def home(request):
         'slider_items': valid_slider_items,
         'qhse_services': qhse_services,
         'info_services': info_services,
+        'qhse_category': qhse_category,
+        'info_category': info_category,
         'certifications': valid_certifications,
         'testimonials': valid_testimonials,
     }

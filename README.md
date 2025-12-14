@@ -34,8 +34,6 @@
 - [🌐 Déploiement](#-déploiement)
 - [🧪 Tests](#-tests)
 - [📚 Documentation](#-documentation)
-- [🤝 Contribution](#-contribution)
-- [📞 Support](#-support)
 
 ---
 
@@ -43,15 +41,67 @@
 
 **Uranus Group** est une plateforme web moderne et complète développée avec Django, spécialement conçue pour les entreprises spécialisées en **QHSE (Qualité, Hygiène, Sécurité, Environnement)** et **Informatique**.
 
+### 📊 Schéma Global du Système
+
+```mermaid
+graph TB
+    A[👤 Utilisateur] --> B{Type d'Utilisateur}
+    B -->|Client| C[📱 Dashboard Client]
+    B -->|Manager| D[🛡️ Dashboard Manager]
+    B -->|Admin| E[⚙️ Dashboard Admin]
+    
+    C --> F[📝 Créer Demande]
+    C --> G[📥 Télécharger Livrables]
+    C --> H[👤 Gérer Profil]
+    
+    D --> I[📊 Gérer Demandes]
+    D --> J[📤 Upload Livrables]
+    D --> K[📈 Statistiques]
+    
+    E --> L[👥 Gestion Utilisateurs]
+    E --> M[💼 Gestion Services]
+    E --> N[📰 Gestion Blog]
+    E --> O[🎫 Tickets Support]
+    
+    P[🤖 Chatbot IA] --> Q[💬 Gemini AI]
+    Q --> R[📝 Réponses Intelligentes]
+    
+    style A fill:#0DE1E7
+    style P fill:#4285F4
+    style E fill:#0A1A2F,color:#fff
+```
+
 ### 🎨 Caractéristiques Principales
 
-- 🎯 **Interface moderne** avec animations fluides (GSAP, AOS)
-- 🤖 **Chatbot IA** intégré avec Google Gemini
-- 📊 **Dashboard admin** complet avec graphiques
-- 🔐 **Système de rôles** avancé (Admin, Manager QHSE, Manager Info, Client)
-- 📱 **Design responsive** (mobile-first)
-- 🚀 **Prêt pour la production** avec configuration optimisée
-- 🔒 **Sécurité renforcée** (CSRF, XSS, SQL Injection protection)
+<div align="center">
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  🎯 INTERFACE MODERNE                                       │
+│  ├─ Animations GSAP & AOS                                  │
+│  ├─ Design Responsive                                      │
+│  └─ UX Optimisée                                            │
+│                                                             │
+│  🤖 CHATBOT IA                                              │
+│  ├─ Google Gemini Integration                               │
+│  ├─ Réponses Intelligentes                                 │
+│  └─ Disponible 24/7                                        │
+│                                                             │
+│  📊 DASHBOARD COMPLET                                       │
+│  ├─ Statistiques Temps Réel                                │
+│  ├─ Graphiques Interactifs                                 │
+│  └─ Gestion Centralisée                                     │
+│                                                             │
+│  🔐 SÉCURITÉ RENFORCÉE                                      │
+│  ├─ CSRF Protection                                        │
+│  ├─ XSS Protection                                          │
+│  └─ SQL Injection Protection                               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+</div>
 
 ---
 
@@ -59,185 +109,506 @@
 
 ### 🌐 Frontend Public
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+<details>
+<summary><b>📊 Schéma Frontend - Cliquez pour voir</b></summary>
 
-<div style="background: linear-gradient(135deg, #0A1A2F 0%, #1a2f4f 100%); padding: 20px; border-radius: 10px; color: white;">
+```mermaid
+graph LR
+    A[🏠 Landing Page] --> B[📋 Services]
+    A --> C[📰 Blog]
+    A --> D[👥 À Propos]
+    A --> E[📞 Contact]
+    
+    B --> F[🔍 Recherche]
+    B --> G[🏷️ Filtres]
+    B --> H[📄 Détails]
+    
+    C --> I[📝 Articles]
+    C --> J[🏷️ Catégories]
+    C --> K[💬 Commentaires]
+    
+    E --> L[📧 Formulaire]
+    E --> M[✉️ Email Auto]
+    
+    style A fill:#0DE1E7
+    style B fill:#0A1A2F,color:#fff
+    style C fill:#0DE1E7
+```
+
+</details>
 
 #### 🏠 Landing Page
-- Slider animé avec images
-- Sections QHSE/Informatique
-- Certifications ISO
-- Témoignages clients
-- Animations GSAP
 
-</div>
-
-<div style="background: linear-gradient(135deg, #0DE1E7 0%, #0bc4c9 100%); padding: 20px; border-radius: 10px; color: #0A1A2F;">
+```
+┌─────────────────────────────────────────────────┐
+│  🎠 SLIDER ANIMÉ                                 │
+│  ├─ Images dynamiques                           │
+│  ├─ Transitions fluides                         │
+│  └─ Call-to-action                              │
+│                                                  │
+│  📦 SECTIONS QHSE/INFO                          │
+│  ├─ Services mis en avant                       │
+│  ├─ Descriptions détaillées                    │
+│  └─ Liens vers pages dédiées                    │
+│                                                  │
+│  🏆 CERTIFICATIONS                              │
+│  ├─ Logos ISO                                   │
+│  ├─ Badges qualité                              │
+│  └─ Descriptions                                 │
+│                                                  │
+│  💬 TÉMOIGNAGES                                 │
+│  ├─ Avis clients                                │
+│  ├─ Notes 5 étoiles                             │
+│  └─ Photos et citations                         │
+└─────────────────────────────────────────────────┘
+```
 
 #### 📋 Services
-- Catalogue complet des services
-- Filtrage par catégorie
-- Pages détaillées
-- Prix et durées
+
+<div align="center">
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│  🔍 RECHERCHE │ --> │  🏷️ FILTRES  │ --> │  📋 RÉSULTATS│
+└──────────────┘     └──────────────┘     └──────────────┘
+       │                    │                    │
+       └────────────────────┴────────────────────┘
+                            │
+                            ▼
+                   ┌─────────────────┐
+                   │  📄 PAGE DÉTAIL  │
+                   │  ├─ Description  │
+                   │  ├─ Prix         │
+                   │  └─ Durée        │
+                   └─────────────────┘
+```
 
 </div>
-
-<div style="background: linear-gradient(135deg, #0A1A2F 0%, #1a2f4f 100%); padding: 20px; border-radius: 10px; color: white;">
 
 #### 📰 Blog/CMS
-- Articles avec catégories
-- Système de commentaires
-- Images mises en avant
-- Recherche et filtres
 
-</div>
-
-<div style="background: linear-gradient(135deg, #0DE1E7 0%, #0bc4c9 100%); padding: 20px; border-radius: 10px; color: #0A1A2F;">
-
-#### 📞 Contact
-- Formulaire de contact
-- Envoi d'email automatique
-- Confirmation client
-- Gestion des messages
-
-</div>
-
-</div>
+```
+┌──────────────────────────────────────────────┐
+│  📝 ARTICLES                                 │
+│  ├─ Titre                                    │
+│  ├─ Auteur                                   │
+│  ├─ Date                                     │
+│  ├─ Catégorie                                │
+│  ├─ Image mise en avant                      │
+│  ├─ Contenu riche                            │
+│  └─ Compteur de vues                         │
+│                                              │
+│  🏷️ CATÉGORIES                              │
+│  ├─ Filtrage par catégorie                  │
+│  ├─ Recherche                                │
+│  └─ Pagination                               │
+└──────────────────────────────────────────────┘
+```
 
 ### 👤 Espace Client
 
-- ✅ **Tableau de bord personnalisé**
-- ✅ **Création de demandes de service**
-- ✅ **Suivi des demandes** (statut, historique)
-- ✅ **Téléchargement de livrables**
-- ✅ **Gestion du profil** (avatar, informations)
-- ✅ **Historique complet**
+<details>
+<summary><b>📊 Schéma Dashboard Client - Cliquez pour voir</b></summary>
 
-### 🛡️ Espace Admin Personnalisé
+```mermaid
+graph TD
+    A[👤 Client Connecté] --> B[📊 Dashboard]
+    B --> C[📝 Nouvelle Demande]
+    B --> D[📋 Mes Demandes]
+    B --> E[📥 Mes Livrables]
+    B --> F[👤 Mon Profil]
+    
+    C --> G[📝 Formulaire]
+    G --> H[✅ Demande Créée]
+    
+    D --> I[📊 Statut]
+    D --> J[📅 Historique]
+    D --> K[🔔 Notifications]
+    
+    E --> L[📄 Liste Fichiers]
+    E --> M[⬇️ Téléchargement]
+    
+    style A fill:#0DE1E7
+    style B fill:#0A1A2F,color:#fff
+    style H fill:#28a745,color:#fff
+```
 
-<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #0DE1E7; margin: 20px 0;">
+</details>
 
-#### 📊 Dashboard Principal
-- Statistiques en temps réel
-- Graphiques Chart.js interactifs
-- Demandes récentes
-- Actions rapides
+#### 📊 Tableau Récapitulatif
 
-#### 👥 Gestion Complète
-- **Utilisateurs** : CRUD complet, rôles, permissions
-- **Services** : Catégories, services, prix
-- **Demandes** : Assignation, statuts, priorités
-- **Articles** : Blog, catégories, publications
-- **Contenu** : Certifications, témoignages, slider, équipe
-- **Support** : Tickets, messages, résolutions
+| Fonctionnalité | Description | Statut |
+|---------------|-------------|--------|
+| 🎯 **Dashboard** | Vue d'ensemble personnalisée | ✅ |
+| 📝 **Créer Demande** | Formulaire de demande de service | ✅ |
+| 📋 **Mes Demandes** | Liste et suivi des demandes | ✅ |
+| 📥 **Livrables** | Téléchargement des fichiers | ✅ |
+| 👤 **Profil** | Gestion du compte utilisateur | ✅ |
+| 🔔 **Notifications** | Alertes et mises à jour | ✅ |
 
-#### 📄 Fonctionnalités Avancées
-- Export PDF des demandes
-- Recherche et filtres avancés
-- Notifications internes
-- Gestion des tickets support
+### 🛡️ Espace Admin
 
-</div>
+<details>
+<summary><b>📊 Schéma Dashboard Admin - Cliquez pour voir</b></summary>
+
+```mermaid
+graph TB
+    A[⚙️ Admin Dashboard] --> B[📊 Statistiques]
+    A --> C[👥 Utilisateurs]
+    A --> D[💼 Services]
+    A --> E[📝 Demandes]
+    A --> F[📰 Blog]
+    A --> G[🎫 Tickets]
+    
+    B --> H[📈 Graphiques]
+    B --> I[📉 Métriques]
+    
+    C --> J[➕ Créer]
+    C --> K[✏️ Modifier]
+    C --> L[🗑️ Supprimer]
+    
+    D --> M[📦 Catégories]
+    D --> N[🛍️ Services]
+    
+    E --> O[📋 Liste]
+    E --> P[📄 Export PDF]
+    E --> Q[📤 Livrables]
+    
+    style A fill:#0A1A2F,color:#fff
+    style B fill:#0DE1E7
+    style H fill:#28a745,color:#fff
+```
+
+</details>
+
+#### 📊 Fonctionnalités Admin
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  📊 DASHBOARD PRINCIPAL                                   │
+│  ├─ 📈 Statistiques en temps réel                        │
+│  ├─ 📉 Graphiques Chart.js                               │
+│  ├─ 📋 Demandes récentes                                 │
+│  └─ ⚡ Actions rapides                                    │
+│                                                          │
+│  👥 GESTION UTILISATEURS                                 │
+│  ├─ ➕ Création                                          │
+│  ├─ ✏️ Modification                                     │
+│  ├─ 🗑️ Suppression                                       │
+│  ├─ 🔐 Gestion des rôles                                 │
+│  └─ 📸 Gestion des avatars                               │
+│                                                          │
+│  💼 GESTION SERVICES                                    │
+│  ├─ 📦 Catégories (CRUD)                                 │
+│  ├─ 🛍️ Services (CRUD)                                   │
+│  ├─ 💰 Prix et durées                                    │
+│  └─ 🖼️ Images                                            │
+│                                                          │
+│  📝 GESTION DEMANDES                                     │
+│  ├─ 📋 Liste complète                                    │
+│  ├─ 👤 Assignation                                       │
+│  ├─ 📊 Statuts et priorités                             │
+│  ├─ 📄 Export PDF                                        │
+│  └─ 📤 Gestion livrables                                 │
+│                                                          │
+│  📰 GESTION BLOG                                         │
+│  ├─ 📝 Articles (CRUD)                                   │
+│  ├─ 🏷️ Catégories                                        │
+│  ├─ 🖼️ Images                                            │
+│  └─ 📊 Statistiques                                      │
+│                                                          │
+│  🎫 GESTION TICKETS                                      │
+│  ├─ 📋 Liste tickets                                     │
+│  ├─ 💬 Messages                                         │
+│  ├─ 👤 Assignation                                       │
+│  └─ ✅ Résolution                                        │
+└──────────────────────────────────────────────────────────┘
+```
 
 ### 🤖 Chatbot IA Gemini
 
-<div style="background: linear-gradient(135deg, #4285F4 0%, #34A853 100%); padding: 20px; border-radius: 10px; color: white; margin: 20px 0;">
+<details>
+<summary><b>📊 Schéma Architecture Chatbot - Cliquez pour voir</b></summary>
 
-- 💬 **Interface moderne** avec animations
-- 🧠 **Réponses intelligentes** générées par Gemini
-- 🎯 **Contexte personnalisé** pour Uranus Group
-- ⚡ **Réponses rapides** avec gemini-2.5-flash
-- 🔒 **Sécurisé** (CSRF, validation, protection XSS)
-- 📱 **Responsive** et accessible
+```mermaid
+sequenceDiagram
+    participant U as 👤 Utilisateur
+    participant F as 🌐 Frontend
+    participant B as 🔵 Backend Django
+    participant G as 🤖 Gemini AI
+    
+    U->>F: 💬 Tape un message
+    F->>F: ✅ Validation CSRF
+    F->>B: 📤 POST /chatbot/
+    B->>B: 🔍 Validation JSON
+    B->>B: 🔐 Vérification API Key
+    B->>G: 🚀 Requête API Gemini
+    G->>G: 🧠 Traitement IA
+    G->>B: 📝 Réponse générée
+    B->>B: 🛡️ Protection XSS
+    B->>F: 📥 JSON Response
+    F->>F: 🎨 Affichage message
+    F->>U: 💬 Réponse affichée
+```
 
-</div>
+</details>
+
+#### 🔄 Flux du Chatbot
+
+```
+┌─────────────┐
+│  👤 USER    │
+└──────┬──────┘
+       │ 💬 Message
+       ▼
+┌─────────────────┐
+│  🎨 INTERFACE   │
+│  ├─ Validation  │
+│  └─ CSRF Token  │
+└──────┬──────────┘
+       │ POST /chatbot/
+       ▼
+┌─────────────────┐
+│  🔵 DJANGO      │
+│  ├─ Parse JSON  │
+│  ├─ Validate    │
+│  └─ Configure   │
+└──────┬──────────┘
+       │ API Call
+       ▼
+┌─────────────────┐
+│  🤖 GEMINI AI   │
+│  ├─ Process     │
+│  └─ Generate    │
+└──────┬──────────┘
+       │ Response
+       ▼
+┌─────────────────┐
+│  🔵 DJANGO      │
+│  ├─ Sanitize    │
+│  └─ Format      │
+└──────┬──────────┘
+       │ JSON
+       ▼
+┌─────────────────┐
+│  🎨 INTERFACE   │
+│  ├─ Display     │
+│  └─ Animate     │
+└──────┬──────────┘
+       │ 💬 Réponse
+       ▼
+┌─────────────┐
+│  👤 USER    │
+└─────────────┘
+```
+
+#### 📊 Caractéristiques
+
+| Fonctionnalité | Description | Statut |
+|---------------|-------------|--------|
+| 💬 **Interface Moderne** | Design animé et responsive | ✅ |
+| 🧠 **IA Gemini** | Réponses intelligentes | ✅ |
+| 🎯 **Contexte** | Personnalisé pour Uranus Group | ✅ |
+| ⚡ **Performance** | Réponses rapides (gemini-2.5-flash) | ✅ |
+| 🔒 **Sécurité** | CSRF, validation, XSS protection | ✅ |
+| 📱 **Mobile** | Interface responsive | ✅ |
 
 ---
 
 ## 🛠️ Technologies
 
-### Backend
+### 📊 Stack Technologique
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+<details>
+<summary><b>📊 Schéma Architecture Technique - Cliquez pour voir</b></summary>
 
-- **Django 5.0.1** - Framework web principal
-- **Django REST Framework 3.16.1** - API REST
-- **PostgreSQL** - Base de données (production)
-- **SQLite** - Base de données (développement)
-- **Redis** - Cache (production)
-- **Gunicorn** - Serveur WSGI
-- **WhiteNoise** - Fichiers statiques
+```mermaid
+graph TB
+    subgraph Frontend
+        A[Tailwind CSS]
+        B[GSAP]
+        C[AOS]
+        D[Chart.js]
+        E[JavaScript ES6+]
+    end
+    
+    subgraph Backend
+        F[Django 5.0.1]
+        G[DRF]
+        H[Gunicorn]
+    end
+    
+    subgraph Database
+        I[PostgreSQL]
+        J[SQLite Dev]
+    end
+    
+    subgraph Cache
+        K[Redis]
+    end
+    
+    subgraph AI
+        L[Gemini AI]
+    end
+    
+    A --> F
+    B --> F
+    C --> F
+    D --> F
+    E --> F
+    
+    F --> G
+    F --> I
+    F --> J
+    F --> K
+    F --> L
+    
+    H --> F
+    
+    style F fill:#092E20,color:#fff
+    style L fill:#4285F4,color:#fff
+    style I fill:#316192,color:#fff
+```
 
-</div>
+</details>
 
-### Frontend
+### 🔧 Backend
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
+```
+┌─────────────────────────────────────────┐
+│  🔵 DJANGO 5.0.1                        │
+│  ├─ Framework web principal            │
+│  ├─ ORM pour base de données           │
+│  ├─ Système d'authentification         │
+│  └─ Admin interface                     │
+│                                         │
+│  🔌 DJANGO REST FRAMEWORK              │
+│  ├─ API REST complète                   │
+│  ├─ Serializers                         │
+│  └─ ViewSets                            │
+│                                         │
+│  🗄️ BASE DE DONNÉES                    │
+│  ├─ PostgreSQL (Production)            │
+│  └─ SQLite (Développement)              │
+│                                         │
+│  ⚡ CACHE                               │
+│  └─ Redis (Production)                  │
+│                                         │
+│  🚀 SERVEUR WSGI                        │
+│  └─ Gunicorn                            │
+└─────────────────────────────────────────┘
+```
 
-- **Tailwind CSS** - Framework CSS utilitaire
-- **GSAP 3.12.5** - Animations avancées
-- **AOS** - Animations au scroll
-- **Chart.js** - Graphiques et statistiques
-- **Font Awesome** - Icônes
-- **JavaScript ES6+** - Code moderne
+### 🎨 Frontend
 
-</div>
+```
+┌─────────────────────────────────────────┐
+│  🎨 TAILWIND CSS                        │
+│  ├─ Framework CSS utilitaire            │
+│  ├─ Design responsive                   │
+│  └─ Personnalisation facile             │
+│                                         │
+│  ✨ GSAP 3.12.5                         │
+│  ├─ Animations avancées                 │
+│  ├─ ScrollTrigger                       │
+│  └─ Timeline                            │
+│                                         │
+│  📊 CHART.JS                            │
+│  ├─ Graphiques interactifs              │
+│  ├─ Statistiques                        │
+│  └─ Visualisations                      │
+│                                         │
+│  🎭 AOS                                 │
+│  └─ Animations au scroll                │
+└─────────────────────────────────────────┘
+```
 
-### IA & Outils
+### 🤖 IA & Outils
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;">
-
-- **Google Gemini AI** - Chatbot intelligent
-- **ReportLab** - Génération PDF
-- **Pillow** - Traitement d'images
-- **python-decouple** - Variables d'environnement
-
-</div>
+```
+┌─────────────────────────────────────────┐
+│  🤖 GOOGLE GEMINI AI                    │
+│  ├─ Modèle: gemini-2.5-flash           │
+│  ├─ Réponses intelligentes              │
+│  └─ Contexte personnalisé               │
+│                                         │
+│  📄 REPORTLAB                           │
+│  └─ Génération PDF                      │
+│                                         │
+│  🖼️ PILLOW                              │
+│  └─ Traitement d'images                 │
+│                                         │
+│  🔐 PYTHON-DECOUPLE                     │
+│  └─ Variables d'environnement           │
+└─────────────────────────────────────────┘
+```
 
 ---
 
 ## 🚀 Installation
 
-### 📋 Prérequis
+### 📊 Schéma d'Installation
 
-```bash
-# Vérifier Python
-python3 --version  # Doit être 3.11+
+<details>
+<summary><b>📊 Processus d'Installation - Cliquez pour voir</b></summary>
 
-# Vérifier pip
-pip3 --version
+```mermaid
+flowchart TD
+    A[📥 Cloner Projet] --> B[🐍 Créer venv]
+    B --> C[📦 Installer Dépendances]
+    C --> D[🗄️ Migrations]
+    D --> E[👤 Superuser]
+    E --> F[📁 Collectstatic]
+    F --> G[🚀 Runserver]
+    G --> H[✅ Prêt!]
+    
+    style A fill:#0DE1E7
+    style H fill:#28a745,color:#fff
 ```
 
-### 🔧 Installation Rapide
+</details>
+
+### 🔧 Étapes Détaillées
 
 <div style="background: #0A1A2F; color: #0DE1E7; padding: 20px; border-radius: 10px; margin: 20px 0;">
 
 ```bash
-# 1. Cloner ou naviguer vers le projet
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 1: PRÉPARATION                   │
+# └─────────────────────────────────────────┘
 cd /home/maxime/newC_uranusgroup_V
 
-# 2. Créer l'environnement virtuel
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 2: ENVIRONNEMENT VIRTUEL        │
+# └─────────────────────────────────────────┘
 python3 -m venv venv
-
-# 3. Activer l'environnement virtuel
 source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate  # Windows
+# venv\Scripts\activate    # Windows
 
-# 4. Installer les dépendances
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 3: DÉPENDANCES                   │
+# └─────────────────────────────────────────┘
 pip install -r requirements.txt
 
-# 5. Appliquer les migrations
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 4: BASE DE DONNÉES               │
+# └─────────────────────────────────────────┘
 python manage.py makemigrations
 python manage.py migrate
 
-# 6. Créer un superutilisateur
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 5: SUPERUTILISATEUR              │
+# └─────────────────────────────────────────┘
 python manage.py createsuperuser
 
-# 7. Collecter les fichiers statiques
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 6: FICHIERS STATIQUES           │
+# └─────────────────────────────────────────┘
 python manage.py collectstatic --noinput
 
-# 8. Lancer le serveur
+# ┌─────────────────────────────────────────┐
+# │  ÉTAPE 7: LANCER LE SERVEUR             │
+# └─────────────────────────────────────────┘
 python manage.py runserver
 ```
 
@@ -245,14 +616,19 @@ python manage.py runserver
 
 ### 🎯 Accès
 
-Une fois le serveur lancé, accédez à :
-
-- 🌐 **Site web** : http://127.0.0.1:8000/
-- 🔐 **Admin Django** : http://127.0.0.1:8000/admin/
-- 🛡️ **Dashboard Admin** : http://127.0.0.1:8000/dashboard/admin/
-- 📊 **Dashboard Client** : http://127.0.0.1:8000/dashboard/
-- 🤖 **API REST** : http://127.0.0.1:8000/api/
-- ❤️ **Health Check** : http://127.0.0.1:8000/health/
+```
+┌─────────────────────────────────────────────┐
+│  🌐 URLS D'ACCÈS                            │
+├─────────────────────────────────────────────┤
+│  Site web:      http://127.0.0.1:8000/     │
+│  Admin Django:  http://127.0.0.1:8000/admin/│
+│  Dashboard:     http://127.0.0.1:8000/      │
+│                dashboard/admin/             │
+│  API REST:      http://127.0.0.1:8000/api/ │
+│  Health Check: http://127.0.0.1:8000/      │
+│                health/                      │
+└─────────────────────────────────────────────┘
+```
 
 ---
 
@@ -260,239 +636,193 @@ Une fois le serveur lancé, accédez à :
 
 ### 🔑 Variables d'Environnement
 
-Créez un fichier `.env` à la racine du projet :
+<details>
+<summary><b>📊 Schéma Configuration - Cliquez pour voir</b></summary>
 
-<div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-
-```env
-# Sécurité
-SECRET_KEY=votre-clé-secrète-générée
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Base de données (Production)
-DB_NAME=uranusgroup
-DB_USER=postgres
-DB_PASSWORD=votre-mot-de-passe
-DB_HOST=localhost
-DB_PORT=5432
-
-# Email
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=votre-email@gmail.com
-EMAIL_HOST_PASSWORD=votre-mot-de-passe-app
-DEFAULT_FROM_EMAIL=noreply@uranusgroup.com
-
-# Gemini AI
-GEMINI_API_KEY=votre-clé-api-gemini
-
-# Redis (Production)
-REDIS_URL=redis://127.0.0.1:6379/1
-
-# CORS
-CORS_ALLOWED_ORIGINS=http://localhost:3000
+```mermaid
+graph LR
+    A[.env File] --> B[Settings.py]
+    B --> C[Application]
+    
+    A --> D[SECRET_KEY]
+    A --> E[DEBUG]
+    A --> F[DATABASE]
+    A --> G[EMAIL]
+    A --> H[GEMINI_API]
+    
+    style A fill:#0DE1E7
+    style B fill:#0A1A2F,color:#fff
 ```
 
-</div>
+</details>
 
-### 🗄️ Configuration Base de Données
+#### 📝 Fichier .env
 
-#### Développement (SQLite)
-Par défaut, SQLite est utilisé en développement. Aucune configuration supplémentaire nécessaire.
-
-#### Production (PostgreSQL)
-
-```bash
-# Installer PostgreSQL
-sudo apt-get install postgresql postgresql-contrib
-
-# Créer la base de données
-sudo -u postgres psql
-CREATE DATABASE uranusgroup;
-CREATE USER uranususer WITH PASSWORD 'votre-mot-de-passe';
-GRANT ALL PRIVILEGES ON DATABASE uranusgroup TO uranususer;
-\q
 ```
-
----
-
-## 📱 Utilisation
-
-### 👤 Pour les Clients
-
-1. **Créer un compte** : `/accounts/register/`
-2. **Se connecter** : `/accounts/login/`
-3. **Accéder au dashboard** : `/dashboard/`
-4. **Créer une demande** : Depuis le dashboard
-5. **Consulter les livrables** : Section "Mes livrables"
-
-### 🛡️ Pour les Administrateurs
-
-1. **Se connecter** avec un compte admin
-2. **Accéder au dashboard admin** : `/dashboard/admin/`
-3. **Gérer les utilisateurs** : Menu "Utilisateurs"
-4. **Gérer les services** : Menu "Services"
-5. **Suivre les demandes** : Menu "Demandes"
-6. **Gérer le contenu** : Menus dédiés
-
-### 🤖 Utiliser le Chatbot
-
-1. Cliquez sur le **bouton flottant** en bas à droite
-2. Posez votre question dans le chat
-3. Recevez une réponse intelligente en temps réel
-4. Le chatbot est disponible sur toutes les pages
-
----
-
-## 🤖 Chatbot IA
-
-### 🎯 Fonctionnalités
-
-Le chatbot utilise **Google Gemini AI** pour fournir des réponses intelligentes sur :
-
-- ✅ Services QHSE et Informatique
-- ✅ Certifications ISO
-- ✅ Processus et procédures
-- ✅ Orientation vers les services appropriés
-
-### 🔧 Configuration
-
-La clé API Gemini est configurée dans `settings.py` :
-
-```python
-GEMINI_API_KEY = config('GEMINI_API_KEY', default='votre-clé')
+┌─────────────────────────────────────────────────┐
+│  🔐 SÉCURITÉ                                    │
+│  SECRET_KEY=votre-clé-secrète                  │
+│  DEBUG=True                                     │
+│  ALLOWED_HOSTS=localhost,127.0.0.1             │
+│                                                 │
+│  🗄️ BASE DE DONNÉES (Production)               │
+│  DB_NAME=uranusgroup                           │
+│  DB_USER=postgres                               │
+│  DB_PASSWORD=votre-mot-de-passe                │
+│  DB_HOST=localhost                              │
+│  DB_PORT=5432                                   │
+│                                                 │
+│  📧 EMAIL                                       │
+│  EMAIL_HOST=smtp.gmail.com                     │
+│  EMAIL_PORT=587                                 │
+│  EMAIL_USE_TLS=True                            │
+│  EMAIL_HOST_USER=votre-email@gmail.com         │
+│  EMAIL_HOST_PASSWORD=votre-mot-de-passe-app    │
+│                                                 │
+│  🤖 GEMINI AI                                   │
+│  GEMINI_API_KEY=votre-clé-api-gemini           │
+│                                                 │
+│  ⚡ REDIS (Production)                          │
+│  REDIS_URL=redis://127.0.0.1:6379/1            │
+└─────────────────────────────────────────────────┘
 ```
-
-### 📝 Personnalisation
-
-Le prompt système peut être modifié dans `core/views.py` :
-
-```python
-system_prompt = """Tu es un assistant virtuel pour Uranus Group..."""
-```
-
-Voir [CHATBOT_README.md](./CHATBOT_README.md) pour plus de détails.
 
 ---
 
 ## 🔒 Sécurité
 
-### 🛡️ Mesures Implémentées
+### 🛡️ Schéma de Protection
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+<details>
+<summary><b>📊 Architecture de Sécurité - Cliquez pour voir</b></summary>
 
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+```mermaid
+graph TB
+    A[🌐 Requête] --> B{🔐 Authentification}
+    B -->|✅ Authentifié| C{🛡️ Autorisation}
+    B -->|❌ Non| D[🚫 Accès Refusé]
+    
+    C -->|✅ Autorisé| E[✅ Accès Autorisé]
+    C -->|❌ Non| D
+    
+    E --> F[🛡️ Protection CSRF]
+    E --> G[🛡️ Protection XSS]
+    E --> H[🛡️ Protection SQL]
+    
+    F --> I[📝 Validation]
+    G --> I
+    H --> I
+    
+    I --> J[✅ Réponse Sécurisée]
+    
+    style A fill:#0DE1E7
+    style D fill:#dc3545,color:#fff
+    style J fill:#28a745,color:#fff
+```
 
-**✅ CSRF Protection**
-- Middleware activé
-- Tokens sur tous les formulaires
+</details>
 
-</div>
+### 📊 Tableau de Protection
 
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-
-**✅ XSS Protection**
-- Échappement automatique Django
-- Validation des entrées
-
-</div>
-
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-
-**✅ SQL Injection**
-- ORM Django
-- Requêtes paramétrées
-
-</div>
-
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-
-**✅ Headers Sécurité**
-- X-Frame-Options: DENY
-- X-Content-Type-Nosniff
-- X-XSS-Protection
-
-</div>
-
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-
-**✅ Authentification**
-- Hashage des mots de passe
-- Sessions sécurisées
-- Cookies HttpOnly
-
-</div>
-
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-
-**✅ Autorisation**
-- Système de rôles
-- Permissions granulaires
-- Protection des routes
-
-</div>
-
-</div>
+| Protection | Méthode | Statut | Description |
+|-----------|---------|--------|-------------|
+| 🔐 **CSRF** | Middleware Django | ✅ | Tokens sur tous les formulaires |
+| 🛡️ **XSS** | Échappement auto | ✅ | Templates Django sécurisés |
+| 💉 **SQL Injection** | ORM Django | ✅ | Requêtes paramétrées |
+| 🔒 **Authentification** | Django Auth | ✅ | Hashage bcrypt |
+| 👮 **Autorisation** | Système de rôles | ✅ | Permissions granulaires |
+| 🍪 **Sessions** | Cookies sécurisés | ✅ | HttpOnly, Secure |
 
 ### 🧪 Tests de Sécurité
 
-Exécutez les tests de pénétration :
-
-```bash
-# Tous les tests
-./run_full_pentest.sh
-
-# Tests individuels
-python security_audit.py
-python security_tests.py
-python chatbot_security_tests.py
 ```
+┌─────────────────────────────────────────┐
+│  🔍 TESTS DISPONIBLES                   │
+├─────────────────────────────────────────┤
+│  ✅ Audit de configuration              │
+│  ✅ Tests de pénétration                │
+│  ✅ Tests chatbot                       │
+│  ✅ Tests CSRF                          │
+│  ✅ Tests XSS                           │
+│  ✅ Tests SQL Injection                 │
+│  ✅ Tests authentification              │
+└─────────────────────────────────────────┘
 
-**Score de sécurité : 75%** ✅
-
-Voir [PENTEST_REPORT.md](./PENTEST_REPORT.md) pour le rapport complet.
+📊 Score Global: 75% ✅
+```
 
 ---
 
 ## 📊 Architecture
 
-### 📁 Structure du Projet
+### 🏗️ Structure du Projet
+
+<details>
+<summary><b>📊 Arborescence Complète - Cliquez pour voir</b></summary>
+
+```mermaid
+graph TD
+    A[uranusgroup/] --> B[accounts/]
+    A --> C[blog/]
+    A --> D[core/]
+    A --> E[dashboard/]
+    A --> F[services/]
+    A --> G[templates/]
+    A --> H[static/]
+    A --> I[media/]
+    A --> J[uranusgroup/]
+    
+    B --> B1[models.py]
+    B --> B2[views.py]
+    B --> B3[urls.py]
+    
+    D --> D1[chatbot view]
+    D --> D2[home view]
+    D --> D3[contact view]
+    
+    F --> F1[api.py]
+    F --> F2[models.py]
+    F --> F3[serializers.py]
+    
+    style A fill:#0A1A2F,color:#fff
+    style D fill:#0DE1E7
+    style F fill:#4285F4,color:#fff
+```
+
+</details>
+
+### 📁 Structure Détaillée
 
 ```
 uranusgroup/
-├── 📂 accounts/          # Gestion utilisateurs
-│   ├── models.py         # User, UserProfile
-│   ├── views.py          # Authentification
+│
+├── 📂 accounts/              # 👤 Gestion utilisateurs
+│   ├── models.py            # User, UserProfile
+│   ├── views.py             # Auth, profil
 │   └── urls.py
 │
-├── 📂 blog/              # Blog/CMS
-│   ├── models.py         # Article, Category
+├── 📂 blog/                  # 📰 Blog/CMS
+│   ├── models.py            # Article, Category
 │   ├── views.py
 │   └── urls.py
 │
-├── 📂 core/              # Pages principales
-│   ├── models.py         # ContactMessage, TeamMember, SliderItem
-│   ├── views.py          # Home, contact, about, chatbot
+├── 📂 core/                  # 🏠 Pages principales
+│   ├── models.py            # Contact, Team, Slider
+│   ├── views.py             # Home, contact, chatbot
 │   └── urls.py
 │
-├── 📂 dashboard/         # Dashboard admin
-│   ├── models.py         # Notification, SupportTicket
-│   ├── views.py          # Vues admin
+├── 📂 dashboard/             # 🛡️ Dashboard admin
+│   ├── models.py            # Notification, Ticket
+│   ├── views.py             # Vues admin
 │   └── urls.py
 │
-├── 📂 services/          # Services QHSE/Info
-│   ├── models.py         # Service, ServiceRequest, Deliverable
-│   ├── api.py            # API REST
+├── 📂 services/              # 💼 Services QHSE/Info
+│   ├── models.py            # Service, Request, Deliverable
+│   ├── api.py               # API REST
 │   ├── serializers.py
 │   └── urls.py
 │
-├── 📂 health_check/      # Monitoring
-│   └── views.py
-│
-├── 📂 templates/         # Templates HTML
+├── 📂 templates/             # 🎨 Templates HTML
 │   ├── base.html
 │   ├── accounts/
 │   ├── blog/
@@ -500,119 +830,149 @@ uranusgroup/
 │   ├── dashboard/
 │   └── services/
 │
-├── 📂 static/           # Fichiers statiques
+├── 📂 static/                # 🎨 Fichiers statiques
 │   ├── css/
 │   ├── js/
 │   └── images/
 │
-├── 📂 media/            # Fichiers uploadés
-│
-├── 📂 uranusgroup/      # Configuration
-│   ├── settings.py      # Settings développement
-│   ├── settings_production.py  # Settings production
-│   └── urls.py
-│
-└── 📄 manage.py
+└── 📂 uranusgroup/           # ⚙️ Configuration
+    ├── settings.py
+    ├── settings_production.py
+    └── urls.py
 ```
 
 ### 🔄 Flux de Données
 
+<details>
+<summary><b>📊 Flux Complet - Cliquez pour voir</b></summary>
+
+```mermaid
+sequenceDiagram
+    participant U as Utilisateur
+    participant B as Browser
+    participant D as Django
+    participant DB as Database
+    participant AI as Gemini AI
+    
+    U->>B: Requête HTTP
+    B->>D: Requête Django
+    D->>D: Middleware (CSRF, Auth)
+    D->>DB: Query ORM
+    DB->>D: Données
+    D->>D: Template Rendering
+    D->>B: HTML Response
+    B->>U: Page Affichée
+    
+    Note over U,AI: Chatbot Flow
+    U->>B: Message Chatbot
+    B->>D: POST /chatbot/
+    D->>AI: API Gemini
+    AI->>D: Réponse IA
+    D->>B: JSON Response
+    B->>U: Message Affiché
 ```
-Client → URL → View → Model → Database
-                ↓
-            Template → Response
-```
 
-### 🎨 Design System
-
-<div style="background: linear-gradient(135deg, #0A1A2F 0%, #1a2f4f 100%); padding: 20px; border-radius: 10px; color: white; margin: 20px 0;">
-
-**Couleurs Principales**
-- 🔵 Primaire foncé : `#0A1A2F`
-- 🔷 Primaire cyan : `#0DE1E7`
-- ⚪ Blanc : `#FFFFFF`
-
-**Typographie**
-- Police : Inter, système de polices modernes
-- Taille : Responsive (mobile-first)
-
-**Animations**
-- GSAP pour les animations complexes
-- AOS pour les animations au scroll
-- Transitions CSS fluides
-
-</div>
+</details>
 
 ---
 
 ## 🌐 Déploiement
 
-### 🚀 Production
+### 🚀 Processus de Déploiement
 
-<div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 20px 0;">
+<details>
+<summary><b>📊 Schéma Déploiement - Cliquez pour voir</b></summary>
 
-#### 📋 Checklist Pré-Déploiement
+```mermaid
+graph LR
+    A[Code] --> B[Tests]
+    B --> C[Build]
+    C --> D[Deploy]
+    D --> E[Production]
+    
+    E --> F[Nginx]
+    E --> G[Gunicorn]
+    E --> H[PostgreSQL]
+    E --> I[Redis]
+    
+    style A fill:#0DE1E7
+    style E fill:#28a745,color:#fff
+```
 
-- [ ] Générer une nouvelle SECRET_KEY
-- [ ] Configurer DEBUG = False
-- [ ] Configurer ALLOWED_HOSTS
-- [ ] Configurer PostgreSQL
-- [ ] Configurer Redis
-- [ ] Configurer SMTP pour emails
-- [ ] Configurer la clé API Gemini
-- [ ] Collecter les fichiers statiques
-- [ ] Configurer Nginx
-- [ ] Configurer Gunicorn
-- [ ] Obtenir un certificat SSL
+</details>
 
-</div>
+### 📋 Checklist
 
-### 📝 Guide Complet
-
-Consultez [DEPLOYMENT.md](./DEPLOYMENT.md) pour le guide complet de déploiement.
-
-### 🔧 Scripts de Déploiement
-
-```bash
-# Déploiement automatique
-./deploy.sh
-
-# Sauvegarde
-./backup.sh
-
-# Gestion production
-python manage_production.py [command]
+```
+┌─────────────────────────────────────────┐
+│  ✅ CHECKLIST DÉPLOIEMENT               │
+├─────────────────────────────────────────┤
+│  [ ] Générer SECRET_KEY                 │
+│  [ ] DEBUG = False                      │
+│  [ ] Configurer ALLOWED_HOSTS           │
+│  [ ] Configurer PostgreSQL              │
+│  [ ] Configurer Redis                   │
+│  [ ] Configurer SMTP                    │
+│  [ ] Configurer Gemini API              │
+│  [ ] Collectstatic                      │
+│  [ ] Configurer Nginx                   │
+│  [ ] Configurer Gunicorn                │
+│  [ ] Obtenir SSL                        │
+│  [ ] Tests de sécurité                  │
+│  [ ] Backup                             │
+└─────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🧪 Tests
 
-### 🔍 Tests de Sécurité
+### 📊 Schéma de Tests
 
-```bash
-# Audit de configuration
-python security_audit.py
+<details>
+<summary><b>📊 Architecture Tests - Cliquez pour voir</b></summary>
 
-# Tests de pénétration
-python security_tests.py
-
-# Tests chatbot
-python chatbot_security_tests.py
-
-# Tous les tests
-./run_full_pentest.sh
+```mermaid
+graph TB
+    A[Tests] --> B[Security Tests]
+    A --> C[Unit Tests]
+    A --> D[Integration Tests]
+    
+    B --> E[Audit]
+    B --> F[Penetration]
+    B --> G[Chatbot Security]
+    
+    C --> H[Models]
+    C --> I[Views]
+    C --> J[API]
+    
+    D --> K[Workflows]
+    D --> L[End-to-End]
+    
+    style A fill:#0DE1E7
+    style B fill:#dc3545,color:#fff
+    style C fill:#ffc107
+    style D fill:#28a745,color:#fff
 ```
 
-### ✅ Tests Django
+</details>
 
-```bash
-# Tous les tests
-python manage.py test
+### 🧪 Commandes de Test
 
-# Tests d'une app spécifique
-python manage.py test accounts
-python manage.py test services
+```
+┌─────────────────────────────────────────┐
+│  🔍 TESTS DE SÉCURITÉ                   │
+├─────────────────────────────────────────┤
+│  ./run_full_pentest.sh                  │
+│  python security_audit.py               │
+│  python security_tests.py               │
+│  python chatbot_security_tests.py       │
+│                                         │
+│  ✅ TESTS DJANGO                        │
+│  python manage.py test                  │
+│  python manage.py test accounts        │
+│  python manage.py test services         │
+└─────────────────────────────────────────┘
 ```
 
 ---
@@ -621,75 +981,19 @@ python manage.py test services
 
 ### 📄 Documents Disponibles
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
-
-- [📊 ANALYSE_PROJET.md](./ANALYSE_PROJET.md) - Analyse complète du projet
-- [🔒 PENTEST_REPORT.md](./PENTEST_REPORT.md) - Rapport de pénétration
-- [🚀 DEPLOYMENT.md](./DEPLOYMENT.md) - Guide de déploiement
-- [✅ PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md) - Checklist production
-- [🤖 CHATBOT_README.md](./CHATBOT_README.md) - Documentation chatbot
-- [🛡️ ADMIN_FEATURES.md](./ADMIN_FEATURES.md) - Fonctionnalités admin
-- [🔐 SECURITY_SUMMARY.md](./SECURITY_SUMMARY.md) - Résumé sécurité
-
-</div>
-
----
-
-## 🤝 Contribution
-
-### 📝 Guidelines
-
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
-### 🔍 Code Review
-
-- Respecter les conventions PEP 8
-- Ajouter des tests pour les nouvelles fonctionnalités
-- Documenter le code
-- Vérifier la sécurité
-
----
-
-## 📞 Support
-
-### 💬 Contact
-
-- 📧 Email : contact@uranusgroup.com
-- 🌐 Site web : https://uranusgroup.com
-- 📱 Téléphone : +33 1 XX XX XX XX
-
-### 🐛 Signaler un Bug
-
-Ouvrez une issue sur le dépôt avec :
-- Description du bug
-- Steps to reproduce
-- Comportement attendu
-- Screenshots (si applicable)
-
-### 💡 Suggestions
-
-Les suggestions sont les bienvenues ! Ouvrez une issue avec le tag `enhancement`.
-
----
-
-## 📄 Licence
-
-**Propriétaire - Uranus Group © 2024**
-
-Tous droits réservés. Ce projet est la propriété exclusive d'Uranus Group.
-
----
-
-## 🎉 Remerciements
-
-- Django Community
-- Tailwind CSS
-- Google Gemini AI
-- Tous les contributeurs
+```
+┌─────────────────────────────────────────┐
+│  📚 DOCUMENTATION                       │
+├─────────────────────────────────────────┤
+│  📊 ANALYSE_PROJET.md                   │
+│  🔒 PENTEST_REPORT.md                   │
+│  🚀 DEPLOYMENT.md                       │
+│  ✅ PRODUCTION_CHECKLIST.md             │
+│  🤖 CHATBOT_README.md                   │
+│  🛡️ ADMIN_FEATURES.md                   │
+│  🔐 SECURITY_SUMMARY.md                 │
+└─────────────────────────────────────────┘
+```
 
 ---
 

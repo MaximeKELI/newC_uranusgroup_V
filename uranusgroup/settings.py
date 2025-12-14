@@ -301,3 +301,7 @@ if not DEBUG:
             },
         },
     }
+
+# Configuration Google Gemini AI
+DEFAULT_GEMINI_KEY = 'AIzaSyAoAnErMdEP7OYtoaDemWPYrN9NydF3Tj4'
+GEMINI_API_KEY = config('GEMINI_API_KEY', default=DEFAULT_GEMINI_KEY)

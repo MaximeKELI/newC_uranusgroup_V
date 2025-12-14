@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}Uranus Group - QHSE & Informatique{% endblock %}</title>
     
     <!-- Tailwind CSS -->
@@ -21,6 +22,9 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chatbot CSS -->
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
     
     <!-- Custom CSS -->
     <style>
@@ -295,6 +299,9 @@
             gsap.registerPlugin(ScrollTrigger);
         }
     </script>
+    
+    <!-- Chatbot JavaScript -->
+    <script src="{% static 'js/chatbot.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

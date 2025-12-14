@@ -6,6 +6,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+import json
+import google.generativeai as genai
 from .models import ContactMessage, TeamMember, SliderItem
 from services.models import Service, ServiceCategory, Certification, Testimonial
 
@@ -166,3 +169,108 @@ L'équipe Uranus Group
         return redirect('core:contact')
     
     return render(request, 'core/contact.html')
+
+
+@require_http_methods(["POST"])
+def chatbot(request):
+    """
+    Endpoint pour le chatbot IA Gemini
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Parser le JSON
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            logger.error(f"Erreur parsing JSON: {e}")
+            return JsonResponse({
+                'error': 'Format de requête invalide',
+                'status': 'error'
+            }, status=400)
+        
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return JsonResponse({'error': 'Le message ne peut pas être vide'}, status=400)
+        
+        # Vérifier que la clé API est configurée
+        if not settings.GEMINI_API_KEY:
+            logger.error("GEMINI_API_KEY n'est pas configurée")
+            return JsonResponse({
+                'error': 'Configuration API manquante',
+                'status': 'error'
+            }, status=500)
+        
+        # Configuration de l'API Gemini
+        try:
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+        except Exception as e:
+            logger.error(f"Erreur configuration Gemini: {e}")
+            return JsonResponse({
+                'error': f'Erreur de configuration API: {str(e)}',
+                'status': 'error'
+            }, status=500)
+        
+        # Créer le modèle
+        try:
+            model = genai.GenerativeModel('gemini-pro')
+        except Exception as e:
+            logger.error(f"Erreur création modèle: {e}")
+            return JsonResponse({
+                'error': f'Erreur création modèle: {str(e)}',
+                'status': 'error'
+            }, status=500)
+        
+        # Prompt système pour contextualiser le chatbot
+        system_prompt = """Tu es un assistant virtuel pour Uranus Group, une entreprise spécialisée en QHSE (Qualité, Hygiène, Sécurité, Environnement) et Informatique.
+
+Tu dois :
+- Répondre de manière professionnelle et amicale
+- Fournir des informations sur les services QHSE et Informatique
+- Aider les clients à comprendre les certifications ISO
+- Orienter les clients vers les services appropriés
+- Répondre en français
+- Être concis mais informatif
+
+Si tu ne connais pas la réponse, oriente l'utilisateur vers le formulaire de contact ou la page des services."""
+        
+        # Construire le message complet
+        full_message = f"{system_prompt}\n\nUtilisateur: {user_message}\nAssistant:"
+        
+        # Générer la réponse
+        try:
+            response = model.generate_content(full_message)
+        except Exception as e:
+            logger.error(f"Erreur génération contenu Gemini: {e}")
+            return JsonResponse({
+                'error': f'Erreur API Gemini: {str(e)}',
+                'status': 'error'
+            }, status=500)
+        
+        # Extraire le texte de la réponse
+        try:
+            bot_response = response.text.strip()
+        except AttributeError:
+            # Si response.text n'existe pas, essayer d'autres méthodes
+            try:
+                bot_response = str(response).strip()
+            except Exception as e:
+                logger.error(f"Erreur extraction réponse: {e}, type: {type(response)}")
+                return JsonResponse({
+                    'error': 'Format de réponse inattendu de l\'API',
+                    'status': 'error'
+                }, status=500)
+        
+        return JsonResponse({
+            'response': bot_response,
+            'status': 'success'
+        })
+        
+    except Exception as e:
+        logger.exception(f"Erreur inattendue dans chatbot: {e}")
+        return JsonResponse({
+            'error': f'Erreur serveur: {str(e)}',
+            'status': 'error'
+        }, status=500)

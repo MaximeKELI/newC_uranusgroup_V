@@ -213,15 +213,20 @@ def chatbot(request):
                 'status': 'error'
             }, status=500)
         
-        # Créer le modèle
+        # Créer le modèle (utiliser gemini-2.5-flash pour la vitesse)
         try:
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-2.5-flash')
         except Exception as e:
             logger.error(f"Erreur création modèle: {e}")
-            return JsonResponse({
-                'error': f'Erreur création modèle: {str(e)}',
-                'status': 'error'
-            }, status=500)
+            # Essayer avec un autre modèle en fallback
+            try:
+                model = genai.GenerativeModel('gemini-2.5-pro')
+            except Exception as e2:
+                logger.error(f"Erreur création modèle fallback: {e2}")
+                return JsonResponse({
+                    'error': f'Erreur création modèle: {str(e)}',
+                    'status': 'error'
+                }, status=500)
         
         # Prompt système pour contextualiser le chatbot
         system_prompt = """Tu es un assistant virtuel pour Uranus Group, une entreprise spécialisée en QHSE (Qualité, Hygiène, Sécurité, Environnement) et Informatique.
@@ -236,12 +241,17 @@ Tu dois :
 
 Si tu ne connais pas la réponse, oriente l'utilisateur vers le formulaire de contact ou la page des services."""
         
-        # Construire le message complet
+        # Construire le message complet avec le prompt système
         full_message = f"{system_prompt}\n\nUtilisateur: {user_message}\nAssistant:"
         
         # Générer la réponse
         try:
-            response = model.generate_content(full_message)
+            response = model.generate_content(
+                full_message,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=0.7,
+                )
+            )
         except Exception as e:
             logger.error(f"Erreur génération contenu Gemini: {e}")
             return JsonResponse({

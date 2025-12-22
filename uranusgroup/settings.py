@@ -119,7 +119,7 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
        # }
     #}
 #else:
-DATABASES = {
+"""DATABASES = {
             "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": config('DB_NAME', default='uranusgroup_3363'),
@@ -129,8 +129,15 @@ DATABASES = {
             "PORT": config('DB_PORT', default='36344'),
         }
     }
+"""
+import dj_database_url
+import os
 
-
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('SCALINGO_POSTGRESQL_URL')
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

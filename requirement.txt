@@ -28,4 +28,5 @@ typing_extensions==4.15.0
 urllib3==2.6.2
 whitenoise==6.11.0
 gunicorn
-psycopg[binary]==3.1.10
+psycopg2-binary==2.9.9
+

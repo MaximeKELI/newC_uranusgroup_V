@@ -111,21 +111,21 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Utiliser PostgreSQL en production, SQLite en développement
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    DATABASES = {
-        "default": {
+#if DEBUG:
+    #DATABASES = {
+        #"default": {
+            #"ENGINE": "django.db.backends.sqlite3",
+            #"NAME": BASE_DIR / "db.sqlite3",
+       # }
+    #}
+#else:
+DATABASES = {
+            "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": config('DB_NAME', default='uranusgroup'),
-            "USER": config('DB_USER', default='postgres'),
-            "PASSWORD": config('DB_PASSWORD', default=''),
-            "HOST": config('DB_HOST', default='localhost'),
+            "USER": config('DB_USER', default='maximekeli'),
+            "PASSWORD": config('DB_PASSWORD', default='zQz_tqRspiLa8fM6XtlyZ3bS7FXz4WDByDv1j_y7pH_YswZjmHAFxkgjsQktUeh1'),
+            "HOST": config('DB_HOST', default='192.168.100.3'),
             "PORT": config('DB_PORT', default='5432'),
         }
     }

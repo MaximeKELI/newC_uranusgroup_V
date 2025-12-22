@@ -31,3 +31,5 @@ gunicorn
 psycopg>=3.1.0
 
 
+psycopg>=3.1.0
+dj-database-url

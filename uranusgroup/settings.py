@@ -119,7 +119,7 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
        # }
     #}
 #else:
-DATABASES = {
+"""DATABASES = {
             "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": config('DB_NAME', default='uranusgroup_3363'),
@@ -129,6 +129,13 @@ DATABASES = {
             "PORT": config('DB_PORT', default='36344'),
         }
     }
+"""
+
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(default='SCALINGO_POSTGRESQL_URL=postgres://uranusgroup_3363:zsYnp8T4R7eT32jKo_YLhBb3Lp5qHcuBPkTdhUhy1c9HCbrwtqeqEF_6SrWy3jOS@uranusgroup-3363.postgresql.c.osc-fr1.scalingo-dbs.com:36344/uranusgroup_3363?sslmode=prefer')
+}
 
 
 # Password validation

@@ -122,11 +122,11 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
 DATABASES = {
             "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config('DB_NAME', default='uranusgroup'),
-            "USER": config('DB_USER', default='maximekeli'),
-            "PASSWORD": config('DB_PASSWORD', default='zQz_tqRspiLa8fM6XtlyZ3bS7FXz4WDByDv1j_y7pH_YswZjmHAFxkgjsQktUeh1'),
-            "HOST": config('DB_HOST', default='192.168.100.3'),
-            "PORT": config('DB_PORT', default='5432'),
+            "NAME": config('DB_NAME', default='uranusgroup_3363'),
+            "USER": config('DB_USER', default='uranusgroup_3363'),
+            "PASSWORD": config('DB_PASSWORD', default='zsYnp8T4R7eT32jKo_YLhBb3Lp5qHcuBPkTdhUhy1c9HCbrwtqeqEF_6SrWy3jOS'),
+            "HOST": config('DB_HOST', default='uranusgroup-3363.postgresql.c.osc-fr1.scalingo-dbs.com'),
+            "PORT": config('DB_PORT', default='36344'),
         }
     }
 

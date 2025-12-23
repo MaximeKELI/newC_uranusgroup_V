@@ -133,8 +133,15 @@ WSGI_APPLICATION = "uranusgroup.wsgi.application"
 
 import dj_database_url
 
+# Configuration de la base de données
+# Scalingo fournit automatiquement SCALINGO_POSTGRESQL_URL
+# Pour le développement local, utilisez DATABASE_URL ou SQLite par défaut
+database_url = config('SCALINGO_POSTGRESQL_URL', default=None)
+if not database_url:
+    database_url = config('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
+
 DATABASES = {
-    'default': dj_database_url.config(default='SCALINGO_POSTGRESQL_URL=postgres://uranusgroup_3363:zsYnp8T4R7eT32jKo_YLhBb3Lp5qHcuBPkTdhUhy1c9HCbrwtqeqEF_6SrWy3jOS@uranusgroup-3363.postgresql.c.osc-fr1.scalingo-dbs.com:36344/uranusgroup_3363?sslmode=prefer')
+    'default': dj_database_url.parse(database_url, conn_max_age=600)
 }
 
 

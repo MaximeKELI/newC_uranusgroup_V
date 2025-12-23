@@ -172,3 +172,4 @@ Les styles CSS sont dans `static/css/chatbot.css`. Vous pouvez personnaliser :
 *Chatbot créé le 6 décembre 2024*
 
 
+

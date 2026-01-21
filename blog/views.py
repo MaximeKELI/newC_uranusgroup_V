@@ -21675,3 +21675,10 @@ def article_detail(request, slug):
 
 
 
+
+
+
+
+
+
+
